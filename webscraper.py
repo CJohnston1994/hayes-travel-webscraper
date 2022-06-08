@@ -1,19 +1,20 @@
+from turtle import title
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver import Chrome
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
 from webdriver_manager.chrome import ChromeDriverManager
-from bs4 import BeautifulSoup
-import requests
+from selenium.webdriver.chrome.service import Service
 import pprint
 import time
 
 class Scraper:
     def __init__(self):
         self.URL = "https://www.haystravel.co.uk/holiday-destinations"
-        options = Options().add_argument("--headless")
-        self.driver = Chrome(ChromeDriverManager().install(), options=options)
+        options = Options()
+        #options.add_argument("--headless")
+        self.driver = Chrome(service=Service(ChromeDriverManager().install()), options = options) 
         self.driver.implicitly_wait(5)
         self.driver.get(self.URL)
         self.wait = WebDriverWait(self.driver, 10)
@@ -27,38 +28,47 @@ class Scraper:
         cookies_btn.click()
         print("Cookies Done")
 
-    def list_areas(self, country):
-        print("list_area entered")
-        areas = {}
-        url = f"https://www.haystravel.co.uk/destinations/{country}-holidays/"
-        self.driver.find_element(By.LINK_TEXT, f"{country.capitalize()}").click()
-        elems = self.driver.find_elements(By.XPATH, f'//a[contains(@href, "/{country}")]')
-        pprint.pprint(elems)
-        for elem in elems:
-            dest_link = elem.get_attribute("@href")
-            print()
-            city = dest_link.replace(url, "").replace("/", " - ").replace("-", " ")
-            areas[city] = dest_link
-        print("areas returned")
-        return areas
-
-    def list_countries(self):
+    def dict_cities(self, dict_of_countries: dict):
         '''
-        Creates a dictionary, the key will be the destination and the content will be a nested dictonary with the sub areas and urls
+        1. Takes in the dict of country urls's. creates a new list from the keys in the dict
+        2. Loops throught the country urls and visits each webpage
+        3. Creates a dict using the cities as keys and the urls as the values
+        4. returns the dict to be nested within the original dict
+        '''
+        print("list_area entered")
+        dict_of_cities = {}
+        list_of_countries = dict_of_countries.keys()
+        for country in list_of_countries:
+            self.driver.get(dict_of_countries[country])
+            elems = self.driver.find_elements(By.XPATH, '//a[@class = "item shadow"]')
+            for elem in elems:
+                dest_link = elem.get_attribute("href")
+                city = elem.get_attribute('title')
+                dict_of_cities[city] = dest_link
+            dict_of_countries[country] = dict_of_cities
+        return dict_of_countries
+
+    def dict_countries(self):
+        '''
+        Creates a dictionary, using the destination as a key and the URL as the value
         '''
         countries = {}
-        elems = self.driver.find_elements(By.CLASS_NAME, 'item-shadow')
+        elems = self.driver.find_elements(By.XPATH, '//a[@class = "item shadow"]')
         for elem in elems:
+            dest_link = elem.get_attribute('href')
             country = elem.get_attribute('title')
-            countries[country] = self.list_areas(country)
-        print("countries: ",countries)
+            countries[country] = dest_link
+        return countries
+
 
 if __name__ == "__main__":
     try:
         web_scraper = Scraper()
-        print(web_scraper.driver.title)
+        #print(web_scraper.driver.title)
         web_scraper.accept_cookies()
-        web_scraper.list_countries()
+        country_dict = web_scraper.dict_countries()
+        city_dict = web_scraper.dict_cities(country_dict)
+        pprint.pprint(city_dict)
     finally:
         time.sleep(5)
         web_scraper.driver.quit()
