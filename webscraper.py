@@ -21,11 +21,11 @@ class Scraper:
             self.url = url
             self.deterministic_id = url.replace("https://www.haystravel.co.uk/","")
             self.uuid = str(uuid.uuid4())
-            self.location = self.driver.find_elements(By.XPATH, '//div[@class = "resort color-yellow font-gotham"]')
-            self.resort = self.driver.find_elements(By.XPATH, '//div[@class = "hotel color-blue mb-0"]')
+            #self.location = self.driver.find_elements(By.XPATH, '//div[@class = "resort color-yellow font-gotham"]')
+            #self.resort = self.driver.find_elements(By.XPATH, '//div[@class = "hotel color-blue mb-0"]')
 
         def holiday_details(self):
-            holiday_details = [self.url, self.deterministic_id, self.uuid]
+            holiday_details = [self.url, self.uuid, self.deterministic_id]
             return holiday_details
         
     def accept_cookies(self):
@@ -56,6 +56,10 @@ class Scraper:
         return countries
 
     def get_holidays_by_country(self, dict_of_countries:dict):
+        '''
+        Takes the country url dict and gets all the holidays hrefs from the urls for the countries
+
+        '''
 
         #using the keys of the original dict
         list_of_countries = dict_of_countries.keys()
