@@ -9,6 +9,7 @@ from selenium.webdriver.chrome.service import Service
 import pprint
 import time
 
+
 class Scraper:
     def __init__(self):
         self.URL = "https://www.haystravel.co.uk/holiday-destinations"
