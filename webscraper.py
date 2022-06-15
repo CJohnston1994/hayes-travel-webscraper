@@ -7,6 +7,7 @@ from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.chrome.service import Service
 import pprint
 import uuid
+import re
 
 class Scraper:
     def __init__(self):
@@ -16,18 +17,28 @@ class Scraper:
         self.driver = Chrome(service=Service(ChromeDriverManager().install()), options = options) 
         self.wait = WebDriverWait(self.driver, 10)
 
-    class Holiday:
-        def __init__(self, url):
+    class Holiday():
+        def __init__(self, url, driver):
+            super().__init__()
             self.url = url
             self.deterministic_id = url.replace("https://www.haystravel.co.uk/","")
             self.uuid = str(uuid.uuid4())
-            #self.location = self.driver.find_elements(By.XPATH, '//div[@class = "resort color-yellow font-gotham"]')
-            #self.resort = self.driver.find_elements(By.XPATH, '//div[@class = "hotel color-blue mb-0"]')
+            self.driver = driver
+            
 
         def holiday_details(self):
-            holiday_details = [self.url, self.uuid, self.deterministic_id]
+            resort = self.driver.find_element(By.CLASS_NAME, 'resort').get_attribute('innerText')
+            hotel = self.driver.find_element(By.XPATH, '//div[@class="resort color-yellow font-gotham"]').get_attribute('innerText')
+            star_rating = float(self.driver.find_element(By.XPATH, '//span[@class = "rating-label"]').text.rstrip("/5"))
+            holiday_price = int(self.clean_price(self.driver.find_element(By.CLASS_NAME, 'price').get_attribute("innerText")))
+
+            holiday_details = [self.url, self.uuid, self.deterministic_id, hotel, resort, holiday_price, star_rating]
             return holiday_details
-        
+
+        def clean_price(self, price):
+            return price.replace("\n","").replace("\t","").replace("£","").replace("p","")
+            
+
     def accept_cookies(self):
         '''
         Finds the Accept Cookies Button, waits for it to be clickable and then clicks it
@@ -71,31 +82,35 @@ class Scraper:
             current_country_url = dict_of_countries[country]
             self.driver.get(current_country_url)
             #check for all holidays by XPATH
-            try:
-                #get the elements
-                elems = self.driver.find_elements(By.XPATH , '//a[@class = "more color-white bg-yellow font-gotham"]')
-                #wait until all elements have been located
-                WebDriverWait(self.driver, 5).until(EC.presence_of_all_elements_located((By.XPATH , '//a[@class = "more color-white bg-yellow font-gotham"]')))
-                for elem in elems:
+            #wait until all elements have been located
+            #self.wait.until(EC.presence_of_all_elements_located((By.XPATH , '//a[@class = "more color-white bg-yellow font-gotham"]')))
+            #get the elements
+            elems = self.driver.find_elements(By.XPATH , '//a[@class = "more color-white bg-yellow font-gotham"]')
+            for elem in elems:
+                try:
                     #get the href link and append it to the holiday list
                     dest_link = elem.get_attribute('href')
-                    this_holiday = self.Holiday(dest_link)
-                    list_of_holidays.append(this_holiday.holiday_details())
+                except:
+                    countries_without_holidays.append(country)
+                this_holiday = self.Holiday(dest_link, self.driver)
+                list_of_holidays.append(this_holiday.holiday_details())
             #if none are found in this area remove the key from the dict
             #in this case the some destinations are on an alternate url called hayesfaraway.co.uk
-            except:
                 #add to a list of emty keys in the country dict
-                countries_without_holidays.append(country)
+                #rint(f"{country} has none")
             #assign the list of holidays to the current country
             dict_of_countries[country] = list_of_holidays
         #remove the empty countries collected in the previous step
-        dict_of_countries = self.remove_empty_keys(dict_of_countries,countries_without_holidays)
+        #dict_of_countries = self.remove_empty_keys(dict_of_countries,countries_without_holidays)
         return dict_of_countries
 
     def begin_scrape(self):
         self.driver.get(self.URL)
         try:
             self.accept_cookies()
+        except:
+            print("Cookies Failed")
+        try:
             country_dict = self.dict_countries()
             final_dict = self.get_holidays_by_country(country_dict)
             pprint.pprint(final_dict)
