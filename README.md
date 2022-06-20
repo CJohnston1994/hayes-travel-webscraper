@@ -1,5 +1,7 @@
+TO BE COMPLETED
+
 # Project Name
-> Outline a brief description of your project.
+> This is a webscraper to collect holiday data from Hays Travel.
 > Live demo [_here_](https://www.example.com). <!-- If you have the project hosted somewhere, include the link here. -->
 
 ## Table of Contents
