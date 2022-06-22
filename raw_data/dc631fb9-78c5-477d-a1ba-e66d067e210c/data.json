@@ -1,0 +1,30 @@
+{
+    "url": "https://www.haystravel.co.uk/rio-park",
+    "uuid": "dc631fb9-78c5-477d-a1ba-e66d067e210c",
+    "human_id": "rio-park",
+    "hotel": "Hotel rio park",
+    "area": "Benidorm, Costa Blanca",
+    "price": 395,
+    "adults/children": [
+        2
+    ],
+    "duration": 7,
+    "catering": "Half Board",
+    "next_date": "2022-07-09",
+    "rating": 4.9,
+    "images": [
+        "https://www.haystravel.co.uk/uploaded/2018/8/1535017181_rio-park06.jpg",
+        "https://www.haystravel.co.uk/uploaded/2018/8/1535017168_rio-park01.jpg",
+        "https://www.haystravel.co.uk/uploaded/2018/8/1535017171_rio-park02.jpg",
+        "https://www.haystravel.co.uk/uploaded/2018/8/1535017174_rio-park03.jpg",
+        "https://www.haystravel.co.uk/uploaded/2018/8/1535017176_rio-park04.jpg",
+        "https://www.haystravel.co.uk/uploaded/2018/8/1535017179_rio-park05.jpg",
+        "https://www.haystravel.co.uk/uploaded/2018/8/1535017181_rio-park06.jpg",
+        "https://www.haystravel.co.uk/uploaded/2018/8/1535017168_rio-park01.jpg",
+        "https://www.haystravel.co.uk/uploaded/2018/8/1535017171_rio-park02.jpg",
+        "https://www.haystravel.co.uk/uploaded/2018/8/1535017174_rio-park03.jpg",
+        "https://www.haystravel.co.uk/uploaded/2018/8/1535017176_rio-park04.jpg",
+        "https://www.haystravel.co.uk/uploaded/2018/8/1535017179_rio-park05.jpg",
+        "https://www.haystravel.co.uk/uploaded/2018/8/1535017181_rio-park06.jpg"
+    ]
+}

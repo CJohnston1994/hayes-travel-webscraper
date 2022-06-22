@@ -1,0 +1,30 @@
+{
+    "url": "https://www.haystravel.co.uk/tui-blue-nevis-sunny-beach",
+    "uuid": "759d8a80-d3df-45a3-bd07-cf8d9e966c91",
+    "human_id": "tui-blue-nevis-sunny-beach",
+    "hotel": "Tui blue nevis",
+    "area": "Sunny Beach, Bulgaria",
+    "price": 975,
+    "adults/children": [
+        21
+    ],
+    "duration": 7,
+    "catering": "All Inclusive",
+    "next_date": "2022-06-27",
+    "rating": 4.9,
+    "images": [
+        "https://awspb.traveltek.net/uploaded/2022/6/1654876239_tui-blue-nevis06.jpg",
+        "https://awspb.traveltek.net/uploaded/2022/6/1654876225_tui-blue-nevis01.jpg",
+        "https://awspb.traveltek.net/uploaded/2022/6/1654876229_tui-blue-nevis02.jpg",
+        "https://awspb.traveltek.net/uploaded/2022/6/1654876231_tui-blue-nevis03.jpg",
+        "https://awspb.traveltek.net/uploaded/2022/6/1654876233_tui-blue-nevis04.jpg",
+        "https://awspb.traveltek.net/uploaded/2022/6/1654876645_tui-blue-nevis05.jpg",
+        "https://awspb.traveltek.net/uploaded/2022/6/1654876239_tui-blue-nevis06.jpg",
+        "https://awspb.traveltek.net/uploaded/2022/6/1654876225_tui-blue-nevis01.jpg",
+        "https://awspb.traveltek.net/uploaded/2022/6/1654876229_tui-blue-nevis02.jpg",
+        "https://awspb.traveltek.net/uploaded/2022/6/1654876231_tui-blue-nevis03.jpg",
+        "https://awspb.traveltek.net/uploaded/2022/6/1654876233_tui-blue-nevis04.jpg",
+        "https://awspb.traveltek.net/uploaded/2022/6/1654876645_tui-blue-nevis05.jpg",
+        "https://awspb.traveltek.net/uploaded/2022/6/1654876239_tui-blue-nevis06.jpg"
+    ]
+}

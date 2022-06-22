@@ -1,0 +1,38 @@
+{
+    "url": "https://www.haystravel.co.uk/dukes-the-palm-dubai",
+    "uuid": "4b2b214a-5b40-499f-a355-869402d8db2d",
+    "human_id": "dukes-the-palm-dubai",
+    "hotel": "Dukes the palm, a royal hideaway hotel",
+    "area": "Dubai, United Arab Emirates",
+    "price": 999,
+    "adults/children": [
+        2
+    ],
+    "duration": 6,
+    "catering": "Bed & Breakfast",
+    "next_date": "2022-09-22",
+    "rating": 4.9,
+    "images": [
+        "https://awspb.traveltek.net/uploaded/2020/10/1602245653_dukesdubai91.jpg",
+        "https://awspb.traveltek.net/uploaded/2020/10/1602245636_dukesdubai1.jpg",
+        "https://awspb.traveltek.net/uploaded/2020/10/1602245638_dukesdubai2.jpg",
+        "https://awspb.traveltek.net/uploaded/2020/10/1602245640_dukesdubai3.jpg",
+        "https://awspb.traveltek.net/uploaded/2020/10/1602245642_dukesdubai4.jpg",
+        "https://awspb.traveltek.net/uploaded/2020/10/1602245644_dukesdubai5.jpg",
+        "https://awspb.traveltek.net/uploaded/2020/10/1602245646_dukesdubai6.jpg",
+        "https://awspb.traveltek.net/uploaded/2020/10/1602245648_dukesdubai7.jpg",
+        "https://awspb.traveltek.net/uploaded/2020/10/1602245649_dukesdubai8.jpg",
+        "https://awspb.traveltek.net/uploaded/2020/10/1602245651_dukesdubai9.jpg",
+        "https://awspb.traveltek.net/uploaded/2020/10/1602245653_dukesdubai91.jpg",
+        "https://awspb.traveltek.net/uploaded/2020/10/1602245636_dukesdubai1.jpg",
+        "https://awspb.traveltek.net/uploaded/2020/10/1602245638_dukesdubai2.jpg",
+        "https://awspb.traveltek.net/uploaded/2020/10/1602245640_dukesdubai3.jpg",
+        "https://awspb.traveltek.net/uploaded/2020/10/1602245642_dukesdubai4.jpg",
+        "https://awspb.traveltek.net/uploaded/2020/10/1602245644_dukesdubai5.jpg",
+        "https://awspb.traveltek.net/uploaded/2020/10/1602245646_dukesdubai6.jpg",
+        "https://awspb.traveltek.net/uploaded/2020/10/1602245648_dukesdubai7.jpg",
+        "https://awspb.traveltek.net/uploaded/2020/10/1602245649_dukesdubai8.jpg",
+        "https://awspb.traveltek.net/uploaded/2020/10/1602245651_dukesdubai9.jpg",
+        "https://awspb.traveltek.net/uploaded/2020/10/1602245653_dukesdubai91.jpg"
+    ]
+}

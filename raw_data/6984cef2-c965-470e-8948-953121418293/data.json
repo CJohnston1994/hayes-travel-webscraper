@@ -1,0 +1,26 @@
+{
+    "url": "https://www.haystravel.co.uk/lapland-hotel-saaga-yllasjarvi",
+    "uuid": "6984cef2-c965-470e-8948-953121418293",
+    "human_id": "lapland-hotel-saaga-yllasjarvi",
+    "hotel": "Lapland hotel saaga",
+    "area": "Yllasjarvi, Lapland",
+    "price": 2745,
+    "adults/children": [
+        2
+    ],
+    "duration": 4,
+    "catering": "Bed & Breakfast",
+    "next_date": "2022-12-22",
+    "rating": 4.9,
+    "images": [
+        "https://www.haystravel.co.uk/uploaded/2018/11/1541180936_hotelsaaga04.jpg",
+        "https://www.haystravel.co.uk/uploaded/2018/11/1541180920_hotelsaaga01.jpg",
+        "https://www.haystravel.co.uk/uploaded/2018/11/1541180923_hotelsaaga02.jpg",
+        "https://www.haystravel.co.uk/uploaded/2018/11/1541180930_hotelsaaga03.jpg",
+        "https://www.haystravel.co.uk/uploaded/2018/11/1541180936_hotelsaaga04.jpg",
+        "https://www.haystravel.co.uk/uploaded/2018/11/1541180920_hotelsaaga01.jpg",
+        "https://www.haystravel.co.uk/uploaded/2018/11/1541180923_hotelsaaga02.jpg",
+        "https://www.haystravel.co.uk/uploaded/2018/11/1541180930_hotelsaaga03.jpg",
+        "https://www.haystravel.co.uk/uploaded/2018/11/1541180936_hotelsaaga04.jpg"
+    ]
+}

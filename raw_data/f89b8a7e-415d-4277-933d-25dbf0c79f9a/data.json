@@ -1,0 +1,32 @@
+{
+    "url": "https://www.haystravel.co.uk/db-seabank-resort-and-spa",
+    "uuid": "f89b8a7e-415d-4277-933d-25dbf0c79f9a",
+    "human_id": "db-seabank-resort-and-spa",
+    "hotel": "Db seabank resort & spa",
+    "area": "Mellieha, Malta",
+    "price": 365,
+    "adults/children": [
+        2
+    ],
+    "duration": 7,
+    "catering": "Half Board",
+    "next_date": "2022-11-29",
+    "rating": 4.9,
+    "images": [
+        "https://www.haystravel.co.uk/uploaded/2018/8/1534754608_db-seabank-resort-spa07.jpg",
+        "https://www.haystravel.co.uk/uploaded/2018/8/1534754581_db-seabank-resort-spa01.jpg",
+        "https://www.haystravel.co.uk/uploaded/2018/8/1534754586_db-seabank-resort-spa02.jpg",
+        "https://www.haystravel.co.uk/uploaded/2018/8/1534754592_db-seabank-resort-spa03.jpg",
+        "https://www.haystravel.co.uk/uploaded/2018/8/1534754598_db-seabank-resort-spa04.jpg",
+        "https://www.haystravel.co.uk/uploaded/2018/8/1534754603_db-seabank-resort-spa05.jpg",
+        "https://www.haystravel.co.uk/uploaded/2018/8/1534754605_db-seabank-resort-spa06.jpg",
+        "https://www.haystravel.co.uk/uploaded/2018/8/1534754608_db-seabank-resort-spa07.jpg",
+        "https://www.haystravel.co.uk/uploaded/2018/8/1534754581_db-seabank-resort-spa01.jpg",
+        "https://www.haystravel.co.uk/uploaded/2018/8/1534754586_db-seabank-resort-spa02.jpg",
+        "https://www.haystravel.co.uk/uploaded/2018/8/1534754592_db-seabank-resort-spa03.jpg",
+        "https://www.haystravel.co.uk/uploaded/2018/8/1534754598_db-seabank-resort-spa04.jpg",
+        "https://www.haystravel.co.uk/uploaded/2018/8/1534754603_db-seabank-resort-spa05.jpg",
+        "https://www.haystravel.co.uk/uploaded/2018/8/1534754605_db-seabank-resort-spa06.jpg",
+        "https://www.haystravel.co.uk/uploaded/2018/8/1534754608_db-seabank-resort-spa07.jpg"
+    ]
+}

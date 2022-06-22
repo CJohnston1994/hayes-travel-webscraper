@@ -1,0 +1,32 @@
+{
+    "url": "https://www.haystravel.co.uk/club-hotel-aquamarina-menorca",
+    "uuid": "e07ddf77-a226-4ead-b14f-dde0cf00855e",
+    "human_id": "club-hotel-aquamarina-menorca",
+    "hotel": "Club hotel aguamarina",
+    "area": "Arenal d'en Castell, Menorca",
+    "price": 1065,
+    "adults/children": [
+        2
+    ],
+    "duration": 7,
+    "catering": "Half Board Plus",
+    "next_date": "2023-05-11",
+    "rating": 4.9,
+    "images": [
+        "https://www.haystravel.co.uk/uploaded/2018/9/1538146992_club-hotel-7.jpg",
+        "https://www.haystravel.co.uk/uploaded/2018/9/1538146963_club-hotel-1.jpg",
+        "https://www.haystravel.co.uk/uploaded/2018/9/1538146980_club-hotel-2.jpg",
+        "https://www.haystravel.co.uk/uploaded/2018/9/1538146982_club-hotel-3.jpg",
+        "https://www.haystravel.co.uk/uploaded/2018/9/1538145867_panorama-3.jpg",
+        "https://www.haystravel.co.uk/uploaded/2018/9/1538146987_club-hotel-5.jpg",
+        "https://www.haystravel.co.uk/uploaded/2018/9/1538146990_club-hotel-6.jpg",
+        "https://www.haystravel.co.uk/uploaded/2018/9/1538146992_club-hotel-7.jpg",
+        "https://www.haystravel.co.uk/uploaded/2018/9/1538146963_club-hotel-1.jpg",
+        "https://www.haystravel.co.uk/uploaded/2018/9/1538146980_club-hotel-2.jpg",
+        "https://www.haystravel.co.uk/uploaded/2018/9/1538146982_club-hotel-3.jpg",
+        "https://www.haystravel.co.uk/uploaded/2018/9/1538145867_panorama-3.jpg",
+        "https://www.haystravel.co.uk/uploaded/2018/9/1538146987_club-hotel-5.jpg",
+        "https://www.haystravel.co.uk/uploaded/2018/9/1538146990_club-hotel-6.jpg",
+        "https://www.haystravel.co.uk/uploaded/2018/9/1538146992_club-hotel-7.jpg"
+    ]
+}

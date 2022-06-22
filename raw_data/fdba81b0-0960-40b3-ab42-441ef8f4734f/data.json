@@ -1,0 +1,30 @@
+{
+    "url": "https://www.haystravel.co.uk/trs-yucatan-hotel-riviera-maya-mexico",
+    "uuid": "fdba81b0-0960-40b3-ab42-441ef8f4734f",
+    "human_id": "trs-yucatan-hotel-riviera-maya-mexico",
+    "hotel": "Trs yucatan hotel",
+    "area": "Riviera Maya, Mexico",
+    "price": 1569,
+    "adults/children": [
+        2
+    ],
+    "duration": 7,
+    "catering": "All Inclusive",
+    "next_date": "2022-10-19",
+    "rating": 4.9,
+    "images": [
+        "https://awspb.traveltek.net/uploaded/2022/2/1645192533_palladium20180515091642462.jpg",
+        "https://awspb.traveltek.net/uploaded/2022/2/1645192517_palladium20170926134017.jpg",
+        "https://awspb.traveltek.net/uploaded/2022/2/1645192521_palladium20180312082248322.jpg",
+        "https://awspb.traveltek.net/uploaded/2022/2/1645192523_palladium20180117154450517.jpg",
+        "https://awspb.traveltek.net/uploaded/2022/2/1645192527_palladium20180117154559839.jpg",
+        "https://awspb.traveltek.net/uploaded/2022/2/1645192531_palladium20180117154645545.jpg",
+        "https://awspb.traveltek.net/uploaded/2022/2/1645192533_palladium20180515091642462.jpg",
+        "https://awspb.traveltek.net/uploaded/2022/2/1645192517_palladium20170926134017.jpg",
+        "https://awspb.traveltek.net/uploaded/2022/2/1645192521_palladium20180312082248322.jpg",
+        "https://awspb.traveltek.net/uploaded/2022/2/1645192523_palladium20180117154450517.jpg",
+        "https://awspb.traveltek.net/uploaded/2022/2/1645192527_palladium20180117154559839.jpg",
+        "https://awspb.traveltek.net/uploaded/2022/2/1645192531_palladium20180117154645545.jpg",
+        "https://awspb.traveltek.net/uploaded/2022/2/1645192533_palladium20180515091642462.jpg"
+    ]
+}

@@ -1,0 +1,30 @@
+{
+    "url": "https://www.haystravel.co.uk/hilton-sorrento-palace-italy",
+    "uuid": "2c5bc46b-d6c8-4a49-bc95-0f8afbf26d7f",
+    "human_id": "hilton-sorrento-palace-italy",
+    "hotel": "Hilton sorrento palace",
+    "area": "Sorrento, Italy",
+    "price": 619,
+    "adults/children": [
+        2
+    ],
+    "duration": 4,
+    "catering": "Bed & Breakfast",
+    "next_date": "2022-10-17",
+    "rating": 4.9,
+    "images": [
+        "https://awspb.traveltek.net/uploaded/2022/2/1644941279_09exteriorhr.jpg",
+        "https://awspb.traveltek.net/uploaded/2022/2/1644941267_01exterior.jpg",
+        "https://awspb.traveltek.net/uploaded/2022/2/1644941269_02doublesuitehr.jpg",
+        "https://awspb.traveltek.net/uploaded/2022/2/1644941273_03dininghr.jpg",
+        "https://awspb.traveltek.net/uploaded/2022/2/1644941275_05pool1hr.jpg",
+        "https://awspb.traveltek.net/uploaded/2022/2/1644941277_06outdoorarea.jpg",
+        "https://awspb.traveltek.net/uploaded/2022/2/1644941279_09exteriorhr.jpg",
+        "https://awspb.traveltek.net/uploaded/2022/2/1644941267_01exterior.jpg",
+        "https://awspb.traveltek.net/uploaded/2022/2/1644941269_02doublesuitehr.jpg",
+        "https://awspb.traveltek.net/uploaded/2022/2/1644941273_03dininghr.jpg",
+        "https://awspb.traveltek.net/uploaded/2022/2/1644941275_05pool1hr.jpg",
+        "https://awspb.traveltek.net/uploaded/2022/2/1644941277_06outdoorarea.jpg",
+        "https://awspb.traveltek.net/uploaded/2022/2/1644941279_09exteriorhr.jpg"
+    ]
+}

@@ -1,0 +1,28 @@
+{
+    "url": "https://www.haystravel.co.uk/elvis-presleys-memphis-new-orleans-nashville",
+    "uuid": "0abd7032-2a84-487f-b207-caa1376265e2",
+    "human_id": "elvis-presleys-memphis-new-orleans-nashville",
+    "hotel": "Elvis presley's memphis, new orleans & nashville",
+    "area": "Tour",
+    "price": 1599,
+    "adults/children": [
+        2
+    ],
+    "duration": 8,
+    "catering": "Room Only",
+    "next_date": "2022-08-23",
+    "rating": 4.9,
+    "images": [
+        "https://awspb.traveltek.net/uploaded/2021/12/1638962976_iblfshxq.jpg",
+        "https://awspb.traveltek.net/uploaded/2021/12/1638962966_inv07918.jpg",
+        "https://awspb.traveltek.net/uploaded/2021/12/1638962968_gettyimages529519794bealestreetmemphistennesseeusa.jpg",
+        "https://awspb.traveltek.net/uploaded/2021/12/1638962970_gettyimages474941681frenchquarterneworleans.jpg",
+        "https://awspb.traveltek.net/uploaded/2021/12/1638962972_dp72980947nashvilletennessee.jpg",
+        "https://awspb.traveltek.net/uploaded/2021/12/1638962976_iblfshxq.jpg",
+        "https://awspb.traveltek.net/uploaded/2021/12/1638962966_inv07918.jpg",
+        "https://awspb.traveltek.net/uploaded/2021/12/1638962968_gettyimages529519794bealestreetmemphistennesseeusa.jpg",
+        "https://awspb.traveltek.net/uploaded/2021/12/1638962970_gettyimages474941681frenchquarterneworleans.jpg",
+        "https://awspb.traveltek.net/uploaded/2021/12/1638962972_dp72980947nashvilletennessee.jpg",
+        "https://awspb.traveltek.net/uploaded/2021/12/1638962976_iblfshxq.jpg"
+    ]
+}

@@ -1,0 +1,28 @@
+{
+    "url": "https://www.haystravel.co.uk/kempinski-seychelles",
+    "uuid": "1d2821d0-6d4a-470b-bda7-fd66b234f608",
+    "human_id": "kempinski-seychelles",
+    "hotel": "Kempinski seychelles resort",
+    "area": "Seychelles",
+    "price": 1799,
+    "adults/children": [
+        2
+    ],
+    "duration": 7,
+    "catering": "Bed & Breakfast",
+    "next_date": "2022-09-18",
+    "rating": 4.9,
+    "images": [
+        "https://awspb.traveltek.net/uploaded/2022/3/1647440396_kempinski-seychelles-5.jpg",
+        "https://awspb.traveltek.net/uploaded/2022/3/1647440404_kempinski-seychelles-1.jpg",
+        "https://awspb.traveltek.net/uploaded/2022/3/1647440402_kempinski-seychelles-2.jpg",
+        "https://awspb.traveltek.net/uploaded/2022/3/1647440399_kempinski-seychelles-3.jpg",
+        "https://awspb.traveltek.net/uploaded/2022/3/1647440397_kempinski-seychelles-4.jpg",
+        "https://awspb.traveltek.net/uploaded/2022/3/1647440396_kempinski-seychelles-5.jpg",
+        "https://awspb.traveltek.net/uploaded/2022/3/1647440404_kempinski-seychelles-1.jpg",
+        "https://awspb.traveltek.net/uploaded/2022/3/1647440402_kempinski-seychelles-2.jpg",
+        "https://awspb.traveltek.net/uploaded/2022/3/1647440399_kempinski-seychelles-3.jpg",
+        "https://awspb.traveltek.net/uploaded/2022/3/1647440397_kempinski-seychelles-4.jpg",
+        "https://awspb.traveltek.net/uploaded/2022/3/1647440396_kempinski-seychelles-5.jpg"
+    ]
+}

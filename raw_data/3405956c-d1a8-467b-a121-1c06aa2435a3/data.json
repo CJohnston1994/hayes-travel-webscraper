@@ -1,0 +1,30 @@
+{
+    "url": "https://www.haystravel.co.uk/andaz-dubai-the-palm-dubai",
+    "uuid": "3405956c-d1a8-467b-a121-1c06aa2435a3",
+    "human_id": "andaz-dubai-the-palm-dubai",
+    "hotel": "Hyatt andaz dubai the palm",
+    "area": "Dubai, United Arab Emirates",
+    "price": 1199,
+    "adults/children": [
+        2
+    ],
+    "duration": 6,
+    "catering": "Room Only",
+    "next_date": "2022-09-22",
+    "rating": 4.9,
+    "images": [
+        "https://awspb.traveltek.net/uploaded/2021/7/1626342534_05.jpg",
+        "https://awspb.traveltek.net/uploaded/2021/7/1626342523_00.jpg",
+        "https://awspb.traveltek.net/uploaded/2021/7/1626342525_01.jpg",
+        "https://awspb.traveltek.net/uploaded/2021/7/1626342528_02.jpg",
+        "https://awspb.traveltek.net/uploaded/2021/7/1626342530_03.jpg",
+        "https://awspb.traveltek.net/uploaded/2021/7/1626342532_04.jpg",
+        "https://awspb.traveltek.net/uploaded/2021/7/1626342534_05.jpg",
+        "https://awspb.traveltek.net/uploaded/2021/7/1626342523_00.jpg",
+        "https://awspb.traveltek.net/uploaded/2021/7/1626342525_01.jpg",
+        "https://awspb.traveltek.net/uploaded/2021/7/1626342528_02.jpg",
+        "https://awspb.traveltek.net/uploaded/2021/7/1626342530_03.jpg",
+        "https://awspb.traveltek.net/uploaded/2021/7/1626342532_04.jpg",
+        "https://awspb.traveltek.net/uploaded/2021/7/1626342534_05.jpg"
+    ]
+}

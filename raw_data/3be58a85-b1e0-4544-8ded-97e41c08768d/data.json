@@ -1,0 +1,30 @@
+{
+    "url": "https://www.haystravel.co.uk/trs-coral-hotel-costa-mujeres-mexico",
+    "uuid": "3be58a85-b1e0-4544-8ded-97e41c08768d",
+    "human_id": "trs-coral-hotel-costa-mujeres-mexico",
+    "hotel": "Trs coral hotel",
+    "area": "Costa Mujeres, Mexico",
+    "price": 1469,
+    "adults/children": [
+        2
+    ],
+    "duration": 7,
+    "catering": "All Inclusive",
+    "next_date": "2022-11-22",
+    "rating": 4.9,
+    "images": [
+        "https://awspb.traveltek.net/uploaded/2022/2/1645189596_palladium20181211172923284.jpg",
+        "https://awspb.traveltek.net/uploaded/2022/2/1645189584_palladium20181005165753696.jpg",
+        "https://awspb.traveltek.net/uploaded/2022/2/1645189586_palladium20181005165802290.jpg",
+        "https://awspb.traveltek.net/uploaded/2022/2/1645189588_palladium20181107130634249.jpg",
+        "https://awspb.traveltek.net/uploaded/2022/2/1645189590_palladium20181107130737540.jpg",
+        "https://awspb.traveltek.net/uploaded/2022/2/1645189594_palladium20181211174538623.jpg",
+        "https://awspb.traveltek.net/uploaded/2022/2/1645189596_palladium20181211172923284.jpg",
+        "https://awspb.traveltek.net/uploaded/2022/2/1645189584_palladium20181005165753696.jpg",
+        "https://awspb.traveltek.net/uploaded/2022/2/1645189586_palladium20181005165802290.jpg",
+        "https://awspb.traveltek.net/uploaded/2022/2/1645189588_palladium20181107130634249.jpg",
+        "https://awspb.traveltek.net/uploaded/2022/2/1645189590_palladium20181107130737540.jpg",
+        "https://awspb.traveltek.net/uploaded/2022/2/1645189594_palladium20181211174538623.jpg",
+        "https://awspb.traveltek.net/uploaded/2022/2/1645189596_palladium20181211172923284.jpg"
+    ]
+}

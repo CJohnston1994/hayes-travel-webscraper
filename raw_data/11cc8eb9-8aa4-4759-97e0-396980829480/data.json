@@ -1,0 +1,30 @@
+{
+    "url": "https://www.haystravel.co.uk/colina-mar",
+    "uuid": "11cc8eb9-8aa4-4759-97e0-396980829480",
+    "human_id": "colina-mar",
+    "hotel": "Colina mar apartments",
+    "area": "Puerto Rico, Gran Canaria",
+    "price": 339,
+    "adults/children": [
+        2
+    ],
+    "duration": 4,
+    "catering": "Self Catering",
+    "next_date": "2022-06-26",
+    "rating": 4.9,
+    "images": [
+        "https://www.haystravel.co.uk/uploaded/2018/11/1542384890_colina-mar06.jpg",
+        "https://www.haystravel.co.uk/uploaded/2018/11/1542384875_colina-mar01.jpg",
+        "https://www.haystravel.co.uk/uploaded/2018/11/1542384879_colina-mar02.jpg",
+        "https://www.haystravel.co.uk/uploaded/2018/11/1542384882_colina-mar03.jpg",
+        "https://www.haystravel.co.uk/uploaded/2018/11/1542384885_colina-mar04.jpg",
+        "https://www.haystravel.co.uk/uploaded/2018/11/1542384887_colina-mar05.jpg",
+        "https://www.haystravel.co.uk/uploaded/2018/11/1542384890_colina-mar06.jpg",
+        "https://www.haystravel.co.uk/uploaded/2018/11/1542384875_colina-mar01.jpg",
+        "https://www.haystravel.co.uk/uploaded/2018/11/1542384879_colina-mar02.jpg",
+        "https://www.haystravel.co.uk/uploaded/2018/11/1542384882_colina-mar03.jpg",
+        "https://www.haystravel.co.uk/uploaded/2018/11/1542384885_colina-mar04.jpg",
+        "https://www.haystravel.co.uk/uploaded/2018/11/1542384887_colina-mar05.jpg",
+        "https://www.haystravel.co.uk/uploaded/2018/11/1542384890_colina-mar06.jpg"
+    ]
+}

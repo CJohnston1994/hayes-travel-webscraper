@@ -1,0 +1,30 @@
+{
+    "url": "https://www.haystravel.co.uk/hotel-club-siroco",
+    "uuid": "2416e81c-726f-4730-838f-8049c73d0383",
+    "human_id": "hotel-club-siroco",
+    "hotel": "Hotel club siroco",
+    "area": "Costa Teguise, Lanzarote",
+    "price": 359,
+    "adults/children": [
+        2
+    ],
+    "duration": 4,
+    "catering": "Bed & Breakfast",
+    "next_date": "2022-10-30",
+    "rating": 4.9,
+    "images": [
+        "https://www.haystravel.co.uk/uploaded/2019/1/1547036365_hotel-club-siroco06.jpg",
+        "https://www.haystravel.co.uk/uploaded/2019/1/1547036330_hotel-club-siroco01.jpg",
+        "https://www.haystravel.co.uk/uploaded/2019/1/1547036340_hotel-club-siroco02.jpg",
+        "https://www.haystravel.co.uk/uploaded/2019/1/1547036345_hotel-club-siroco03.jpg",
+        "https://www.haystravel.co.uk/uploaded/2019/1/1547036352_hotel-club-siroco04.jpg",
+        "https://www.haystravel.co.uk/uploaded/2019/1/1547036361_hotel-club-siroco05.jpg",
+        "https://www.haystravel.co.uk/uploaded/2019/1/1547036365_hotel-club-siroco06.jpg",
+        "https://www.haystravel.co.uk/uploaded/2019/1/1547036330_hotel-club-siroco01.jpg",
+        "https://www.haystravel.co.uk/uploaded/2019/1/1547036340_hotel-club-siroco02.jpg",
+        "https://www.haystravel.co.uk/uploaded/2019/1/1547036345_hotel-club-siroco03.jpg",
+        "https://www.haystravel.co.uk/uploaded/2019/1/1547036352_hotel-club-siroco04.jpg",
+        "https://www.haystravel.co.uk/uploaded/2019/1/1547036361_hotel-club-siroco05.jpg",
+        "https://www.haystravel.co.uk/uploaded/2019/1/1547036365_hotel-club-siroco06.jpg"
+    ]
+}

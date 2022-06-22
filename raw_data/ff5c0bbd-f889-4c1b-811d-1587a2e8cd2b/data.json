@@ -1,0 +1,34 @@
+{
+    "url": "https://www.haystravel.co.uk/warwick-paradise-island-bahamas",
+    "uuid": "ff5c0bbd-f889-4c1b-811d-1587a2e8cd2b",
+    "human_id": "warwick-paradise-island-bahamas",
+    "hotel": "Warwick paradise island bahamas",
+    "area": "Paradise Island, The Bahamas",
+    "price": 1979,
+    "adults/children": [
+        2
+    ],
+    "duration": 7,
+    "catering": "All Inclusive",
+    "next_date": "2022-09-29",
+    "rating": 4.9,
+    "images": [
+        "https://awspb.traveltek.net/uploaded/2021/11/1637849794_warwickparadiseisland08.jpg",
+        "https://awspb.traveltek.net/uploaded/2021/11/1637849778_warwickparadiseisland01.jpg",
+        "https://awspb.traveltek.net/uploaded/2021/11/1637849780_warwickparadiseisland02.jpg",
+        "https://awspb.traveltek.net/uploaded/2021/11/1637849782_warwickparadiseisland03.jpg",
+        "https://awspb.traveltek.net/uploaded/2020/7/1593611100_vistasolpuntacanabeachresortspa04.jpg",
+        "https://awspb.traveltek.net/uploaded/2021/11/1637849786_warwickparadiseisland05.jpg",
+        "https://awspb.traveltek.net/uploaded/2021/11/1637849788_warwickparadiseisland06.jpg",
+        "https://awspb.traveltek.net/uploaded/2021/11/1637849792_warwickparadiseisland07.jpg",
+        "https://awspb.traveltek.net/uploaded/2021/11/1637849794_warwickparadiseisland08.jpg",
+        "https://awspb.traveltek.net/uploaded/2021/11/1637849778_warwickparadiseisland01.jpg",
+        "https://awspb.traveltek.net/uploaded/2021/11/1637849780_warwickparadiseisland02.jpg",
+        "https://awspb.traveltek.net/uploaded/2021/11/1637849782_warwickparadiseisland03.jpg",
+        "https://awspb.traveltek.net/uploaded/2020/7/1593611100_vistasolpuntacanabeachresortspa04.jpg",
+        "https://awspb.traveltek.net/uploaded/2021/11/1637849786_warwickparadiseisland05.jpg",
+        "https://awspb.traveltek.net/uploaded/2021/11/1637849788_warwickparadiseisland06.jpg",
+        "https://awspb.traveltek.net/uploaded/2021/11/1637849792_warwickparadiseisland07.jpg",
+        "https://awspb.traveltek.net/uploaded/2021/11/1637849794_warwickparadiseisland08.jpg"
+    ]
+}

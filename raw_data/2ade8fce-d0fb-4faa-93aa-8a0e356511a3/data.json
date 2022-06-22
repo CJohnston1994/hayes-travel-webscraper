@@ -1,0 +1,30 @@
+{
+    "url": "https://www.haystravel.co.uk/smolyan-hotel-bulgaria",
+    "uuid": "2ade8fce-d0fb-4faa-93aa-8a0e356511a3",
+    "human_id": "smolyan-hotel-bulgaria",
+    "hotel": "Smolyan hotel",
+    "area": "Sunny Beach, Bulgaria",
+    "price": 249,
+    "adults/children": [
+        2
+    ],
+    "duration": 7,
+    "catering": "Room Only",
+    "next_date": "2022-06-30",
+    "rating": 4.9,
+    "images": [
+        "https://www.haystravel.co.uk/uploaded/2019/7/1562317994_26242428.jpg",
+        "https://www.haystravel.co.uk/uploaded/2019/7/1562317979_26242400.jpg",
+        "https://www.haystravel.co.uk/uploaded/2019/7/1562317982_26242401.jpg",
+        "https://www.haystravel.co.uk/uploaded/2019/7/1562317985_26242374.jpg",
+        "https://www.haystravel.co.uk/uploaded/2019/7/1562317987_26242373.jpg",
+        "https://www.haystravel.co.uk/uploaded/2019/7/1562317991_26242447.jpg",
+        "https://www.haystravel.co.uk/uploaded/2019/7/1562317994_26242428.jpg",
+        "https://www.haystravel.co.uk/uploaded/2019/7/1562317979_26242400.jpg",
+        "https://www.haystravel.co.uk/uploaded/2019/7/1562317982_26242401.jpg",
+        "https://www.haystravel.co.uk/uploaded/2019/7/1562317985_26242374.jpg",
+        "https://www.haystravel.co.uk/uploaded/2019/7/1562317987_26242373.jpg",
+        "https://www.haystravel.co.uk/uploaded/2019/7/1562317991_26242447.jpg",
+        "https://www.haystravel.co.uk/uploaded/2019/7/1562317994_26242428.jpg"
+    ]
+}
