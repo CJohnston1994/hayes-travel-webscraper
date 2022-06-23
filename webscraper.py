@@ -1,10 +1,8 @@
-from curses import newpad
 from dataclasses import dataclass
-from datetime import date, datetime
 from genericpath import exists
-import imp
 from re import sub
 from urllib.request import urlretrieve
+from pyparsing import Optional
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver import Chrome
@@ -12,11 +10,10 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.chrome.service import Service
-from datetime import date
-import os, json, uuid, time
+import os, json, uuid
 
 class Scraper:
-    def __init__(self, url):
+    def __init__(self, url, auto_scrape :Optional[bool] = False):
         self.URL = url
         options = Options()
         options.add_argument("--headless")
@@ -24,8 +21,8 @@ class Scraper:
         self.wait = WebDriverWait(self.driver, 10)
         if not exists("raw_data"):
             os.mkdir("raw_data")
-        self.begin_scrape()
-
+        if auto_scrape:
+            self.begin_scrape()
 
     @dataclass
     class Holiday():
@@ -339,7 +336,7 @@ class Scraper:
             #scrape a new dictionary, comment out these three lines to scrape from preexisting dict -- testing
             country_dict = self.dict_countries()
             url_dict = self.get_holidays_from_country(country_dict)
-            self.save_to_json(url_dict, "holiday_url_dict.json", "json_dumps")
+            self.save_to_json(url_dict, "holiday_url_dict.json", "raw_data")
             
             #Allow to scrap from stored json e.g. for custom smaller or specific scrapes and testing
             #url_dict = self.load_from_json("json_dumps/holiday_url_dict.json", dict)
@@ -351,3 +348,4 @@ class Scraper:
 
 if __name__ == "__main__":
     web_scraper = Scraper("https://www.haystravel.co.uk/holiday-destinations")
+    web_scraper.begin_scrape()

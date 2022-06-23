@@ -39,8 +39,8 @@ List the ready features here:
 - Awesome feature 3
 
 
-## Screenshots
-![Example screenshot](./img/screenshot.png)
+## UML
+![Example screenshot](.img/UML Diagram Data Collection.jpg)
 <!-- If you have screenshots you'd like to share, include them here. -->
 
 
