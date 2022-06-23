@@ -79,7 +79,7 @@ class Scraper:
             country_name = elem.get_attribute('title')
             countries[country_name] = dest_link
         #logging.debug('countries finished')
-        return countries
+        return list(dict.fromkeys(countries))
     
     def get_holidays_from_country(self, dict_of_countries:dict):
         '''
@@ -166,22 +166,7 @@ class Scraper:
                 raise TypeError
         except TypeError:
                print("Data retrieval of file: ", file_name, " failed, incorrect type")
-       
-    '''
-    def test_scrape(self, dict_of_countries:dict):
-        \'''
-        early test to scrape a single page to check storage  -- depricated
-        \'''
-        holiday_list = []
-        for country in dict_of_countries:
-            self.driver.get(dict_of_countries[country][0])
-            current_holiday = self.Holiday()
-            current_holiday.details["country"]= country
-            self.get_holiday_details(current_holiday)
-            
-            holiday_list.append(current_holiday.details)
-        return holiday_list'''
-    
+          
     def scrape_per_holidays(self, dict_of_countries):
         '''
         Scrape the holiday data
