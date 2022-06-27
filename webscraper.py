@@ -13,11 +13,12 @@ from selenium.webdriver.chrome.service import Service
 import os, json, uuid
 
 class Scraper:
-    def __init__(self, url, auto_scrape :Optional[bool] = False):
+    def __init__(self, url:str, auto_scrape:bool = False):
         self.URL = url
         options = Options()
         options.add_argument("--headless")
-        self.driver = Chrome(service=Service(ChromeDriverManager().install()), options = options) 
+        self.driver = Chrome(service=Service(ChromeDriverManager().install()), options = options)
+        self.driver.get(self.URL)
         self.wait = WebDriverWait(self.driver, 10)
         if not exists("raw_data"):
             os.mkdir("raw_data")
@@ -79,7 +80,8 @@ class Scraper:
             country_name = elem.get_attribute('title')
             countries[country_name] = dest_link
         #logging.debug('countries finished')
-        return list(dict.fromkeys(countries))
+        self.save_to_json(countries, 'country_urls.json', 'raw_data/src')
+        return countries
     
     def get_holidays_from_country(self, dict_of_countries:dict):
         '''
@@ -94,21 +96,24 @@ class Scraper:
         #loop throught the countries gathered from the site
         for country in dict_of_countries:
             list_of_holidays = []
-            #set the link of the holiday
-            dest_link = dict_of_countries[country]
-            #find the href attributess
-            list_of_holidays = self.find_href(dest_link, holiday_xpath)
-            #if there are no holidays available try looking for cities (site layout inconsistant)
-            if len(list_of_holidays)<1:
-                list_of_cities = self.find_href(dest_link, city_xpath)
-                #if cities are found find holidays within
-                for city in list_of_cities:
-                    list_of_holidays = self.find_href(city, holiday_xpath)
-            #if there are still no entries, set the 
-            if len(list_of_holidays) < 1:
-                countries_without_holidays.append(country)
-            #assign the list to the current country in the dict
-            dict_of_countries[country] = list_of_holidays
+            try:
+                #set the link of the holiday
+                dest_link = dict_of_countries[country]
+                #find the href attributess
+                list_of_holidays = self.find_href(dest_link, holiday_xpath)
+                #if there are no holidays available try looking for cities (site layout inconsistant)
+                if len(list_of_holidays)<1:
+                    list_of_cities = self.find_href(dest_link, city_xpath)
+                    #if cities are found find holidays within
+                    for city in list_of_cities:
+                        list_of_holidays = self.find_href(city, holiday_xpath)
+                #if there are still no entries, set the 
+                if len(list_of_holidays) < 1:
+                    countries_without_holidays.append(country)
+                #assign the list to the current country in the dict
+                dict_of_countries[country] = list_of_holidays
+            except TypeError:
+                return dict_of_countries
         #remove keys with no values
         dict_of_countries =  self.remove_empty_keys_from_list(dict_of_countries, countries_without_holidays)
         return dict_of_countries
@@ -180,7 +185,7 @@ class Scraper:
                 current_holiday.details["country"]= country
                 #get the datails and assign them to the dict entry
                 scraped_holiday = self.get_holiday_details(current_holiday)
-                #create the path for saving the holiday
+                #create the list(dict.fromkeys(countries)path for saving the holiday
                 holiday_json_name = 'data.json'
                 holiday_path = os.path.join("raw_data", f'{current_holiday.get_detail("uuid")}')  
                 os.mkdir(holiday_path)
@@ -315,13 +320,13 @@ class Scraper:
         '''
         Main Scraping of the program
         '''
-        self.driver.get(self.URL)
+        
         self.accept_cookies()
         try:
             #scrape a new dictionary, comment out these three lines to scrape from preexisting dict -- testing
             country_dict = self.dict_countries()
             url_dict = self.get_holidays_from_country(country_dict)
-            self.save_to_json(url_dict, "holiday_url_dict.json", "raw_data")
+            self.save_to_json(url_dict, "holiday_url_dict.json", "raw_data/src")
             
             #Allow to scrap from stored json e.g. for custom smaller or specific scrapes and testing
             #url_dict = self.load_from_json("json_dumps/holiday_url_dict.json", dict)
@@ -332,5 +337,5 @@ class Scraper:
             self.driver.quit()
 
 if __name__ == "__main__":
-    web_scraper = Scraper("https://www.haystravel.co.uk/holiday-destinations")
+    web_scraper = Scraper("https://www.haystravel.co.uk/holiday-destinations", True)
     web_scraper.begin_scrape()
