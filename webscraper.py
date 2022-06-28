@@ -10,7 +10,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.chrome.service import Service
-import os, json, uuid
+import os, json, uuid, time, random
 
 class Scraper:
     def __init__(self, url:str, auto_scrape:bool = False):
@@ -49,19 +49,20 @@ class Scraper:
             except:
                 print(f"Detail not foind: {detail}")
 
-    def accept_cookies(self):
+    def accept_cookies(self, xpath):
         '''
         Finds the Accept Cookies Button, waits for it to be clickable and then clicks it
         '''
         try:
-            cookies_XPATH = (By.ID, 'onetrust-accept-btn-handler')
+            cookies_XPATH = (By.ID, xpath)
             cookies_btn = self.wait.until(EC.element_to_be_clickable(cookies_XPATH))
+            time.sleep(1)
             cookies_btn.click()
-            print("Cookies Done")
+            return True
         except:
-            print("Cookies Failed")
+            return False
 
-    def remove_empty_keys_from_list(self, dict:dict, list:list):
+    def remove_dict_keys_from_list(self, dict:dict, list:list):
         '''
         remove all dict entries form a list passed in, this list should be empty keys
         '''
@@ -115,7 +116,7 @@ class Scraper:
             except TypeError:
                 return dict_of_countries
         #remove keys with no values
-        dict_of_countries =  self.remove_empty_keys_from_list(dict_of_countries, countries_without_holidays)
+        dict_of_countries =  self.remove_dict_keys_from_list(dict_of_countries, countries_without_holidays)
         return dict_of_countries
 
     def find_href(self, url:str, xpath:str):
@@ -172,7 +173,7 @@ class Scraper:
         except TypeError:
                print("Data retrieval of file: ", file_name, " failed, incorrect type")
           
-    def scrape_per_holidays(self, dict_of_countries):
+    def scrape_per_country(self, dict_of_countries):
         '''
         Scrape the holiday data
         '''
@@ -181,15 +182,13 @@ class Scraper:
                 #navigate to the holiday url and create the holiday data object
                 self.driver.get(dict_of_countries[country][url])                 
                 current_holiday = self.Holiday()
-                #set the counrty here to prevent passing it to the get_holiday_details function
-                current_holiday.details["country"]= country
-                #get the datails and assign them to the dict entry
-                scraped_holiday = self.get_holiday_details(current_holiday)
+            #get the datails and assign them to the dict entry
+                scraped_holiday = self.get_holiday_details(current_holiday, country)
                 #create the list(dict.fromkeys(countries)path for saving the holiday
                 holiday_json_name = 'data.json'
                 holiday_path = os.path.join("raw_data", f'{current_holiday.get_detail("uuid")}')  
-                os.mkdir(holiday_path)
                 image_path = os.path.join(holiday_path, "images")
+                os.mkdir(holiday_path)
                 os.mkdir(image_path)
 
                 self.save_to_json(scraped_holiday.details, holiday_json_name, holiday_path)
@@ -206,8 +205,9 @@ class Scraper:
             os.mkdir
             path = os.path.join(folder_path ,image_name)
             urlretrieve(image_link, path)
+            time.sleep(random.randint(0,3))
 
-    def get_holiday_details(self, holiday:object):
+    def get_holiday_details(self, holiday:object, country: str):
         '''
         Method to collect all details for the holiday from the webpage
         '''
@@ -218,6 +218,7 @@ class Scraper:
         deterministic_id = url.replace("https://www.haystravel.co.uk/","")
         hotel = self.find_holiday_detail(location_container, '/h1')
         resort = self.find_holiday_detail(location_container, '/div[2]')
+        holiday_country = country
 
         #detail container fields
         details_container = '//div[@class="text"]'
@@ -240,6 +241,7 @@ class Scraper:
             "human_id": deterministic_id,
             "hotel": hotel.capitalize(),
             "area": resort,
+            "country": holiday_country,
             "price": self.remove_chars_convert_to_int(holiday_price),
             "adults/children": self.remove_chars_convert_to_int(self.check_family_holiday(group_size)),
             "duration": self.remove_chars_convert_to_int(duration),
@@ -270,40 +272,39 @@ class Scraper:
             #split string to isolate day, e.g 1st, 22nd, 31st
             new_date = date_string.split(" ")
             #remove characters from the day use dict to change month to number
+            #remove date subscripts
             new_date[0] = sub(r'[^\d.]', '', new_date[0]).zfill(2)
+            # converts month word
             new_date[1] = month[new_date[1].capitalize()]
             new_date.reverse()
             #convert the month to numberdate
             new_date = "-".join(new_date)
             
             return new_date
-        except:
-            return date_string
+        except KeyError:
+            print("Date String Failed at " + self.driver.current_url())
+            raise KeyError
+
 
     def remove_chars_convert_to_int(self, input):
         '''
         remove characters to convert strings from get_attribute("innerText") to ints
         '''
         new_int_list = []
-        if isinstance(input, list):
-            for i in range(len(list(input))):
-                new_int = int(sub(r'[^\d.]', '', input[i]))
-                new_int_list.append(new_int)
-                return new_int_list
-        else:
-            new_int = int(sub(r'[^\d.]', '', input))
-            return new_int
+        for i in range(len(input)):
+            new_int = sub(r'[^\d.]', '', input[i])
+            new_int_list.append(new_int)
+            
+        print(new_int_list)
+        return list(map(int, new_int_list))
             
     def check_family_holiday(self, no_people:str):
         '''
         if there are Adults and children in a holiday deal split this into a list of 2 entries
         to be converted into ints
         '''
-        try:
-            people = no_people.split(' + ')
-            return people
-        except:
-            return no_people
+        people = no_people.split(' + ')
+        return people
         
     def find_holiday_detail(self, container:str, element_xpath:str):
         '''
@@ -321,7 +322,7 @@ class Scraper:
         Main Scraping of the program
         '''
         
-        self.accept_cookies()
+        self.accept_cookies('onetrust-accept-btn-handler')
         try:
             #scrape a new dictionary, comment out these three lines to scrape from preexisting dict -- testing
             country_dict = self.dict_countries()
@@ -330,11 +331,12 @@ class Scraper:
             
             #Allow to scrap from stored json e.g. for custom smaller or specific scrapes and testing
             #url_dict = self.load_from_json("json_dumps/holiday_url_dict.json", dict)
-            self.scrape_per_holidays(url_dict)
+            self.scrape_per_country(url_dict)
 
         finally:
             print("Scrape Complete")
             self.driver.quit()
+
 
 if __name__ == "__main__":
     web_scraper = Scraper("https://www.haystravel.co.uk/holiday-destinations", True)
