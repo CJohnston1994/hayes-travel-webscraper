@@ -291,12 +291,15 @@ class Scraper:
         remove characters to convert strings from get_attribute("innerText") to ints
         '''
         new_int_list = []
-        for i in range(len(input)):
-            new_int = sub(r'[^\d.]', '', input[i])
-            new_int_list.append(new_int)
-            
-        print(new_int_list)
-        return list(map(int, new_int_list))
+        if isinstance(input, list):
+            for i in range(len(input)):
+                new_int = sub(r'[^\d.]', '', input[i])
+                new_int_list.append(new_int)
+                return list(map(int, new_int_list))
+        else:
+            new_int = int(sub(r'[^\d.]', '', input))
+            return new_int
+
             
     def check_family_holiday(self, no_people:str):
         '''
@@ -340,4 +343,3 @@ class Scraper:
 
 if __name__ == "__main__":
     web_scraper = Scraper("https://www.haystravel.co.uk/holiday-destinations", True)
-    web_scraper.begin_scrape()
