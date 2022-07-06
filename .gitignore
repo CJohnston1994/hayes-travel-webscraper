@@ -1,4 +1,5 @@
 **/*.jpg
 raw_data/*
 !raw_data/src
+!tests/test/*.jpg
 devtest.ipynb
