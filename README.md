@@ -8,7 +8,7 @@ TO BE COMPLETED
 
 # Project Name
 > This is a webscraper to collect holiday data from Hays Travel.
-> Live demo [_here_](https://www.example.com). <!-- If you have the project hosted somewhere, include the link here. -->
+> Live demo TBC
 
 ## Table of Contents
 * [General Info](#general-information)
