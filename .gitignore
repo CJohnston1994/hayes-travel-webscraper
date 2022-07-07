@@ -3,4 +3,5 @@ raw_data/*
 mydb/*
 !raw_data/src
 !tests/test/*.jpg
-devtest.ipynb
+*.ipynb
+secrets.py

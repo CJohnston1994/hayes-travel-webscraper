@@ -339,7 +339,3 @@ class Scraper:
         finally:
             print("Scrape Complete")
             self.driver.quit()
-
-
-if __name__ == "__main__":
-    web_scraper = Scraper("https://www.haystravel.co.uk/holiday-destinations", True)
