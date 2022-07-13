@@ -10,7 +10,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.chrome.service import Service
-import os, json, uuid, time, random
+import os, json, uuid, time, random, aws
 
 class Scraper:
     def __init__(self, url:str, auto_scrape:bool = False):
