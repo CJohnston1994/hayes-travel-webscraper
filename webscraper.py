@@ -10,7 +10,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.chrome.service import Service
-import os, json, uuid, time, random
+import os, json, uuid, time, random, aws
 
 class Scraper:
     def __init__(self, url:str, auto_scrape:bool = False):
@@ -20,6 +20,7 @@ class Scraper:
         self.driver = Chrome(service=Service(ChromeDriverManager().install()), options = options)
         self.driver.get(self.URL)
         self.wait = WebDriverWait(self.driver, 10)
+        data_handler = aws.DataHandler()
         if not exists("raw_data"):
             os.mkdir("raw_data")
         if auto_scrape:
@@ -81,7 +82,7 @@ class Scraper:
             country_name = elem.get_attribute('title')
             countries[country_name] = dest_link
         #logging.debug('countries finished')
-        self.save_to_json(countries, 'country_urls.json', 'raw_data/src')
+        self.save_to_json(countries, 'country_urls.json', 'json_data/src')
         return countries
     
     def get_holidays_from_country(self, dict_of_countries:dict):
@@ -117,6 +118,7 @@ class Scraper:
                 return dict_of_countries
         #remove keys with no values
         dict_of_countries =  self.remove_dict_keys_from_list(dict_of_countries, countries_without_holidays)
+        self.save_to_json(dict_of_countries, "holiday_url_dict.json", "json_data/")
         return dict_of_countries
 
     def find_href(self, url:str, xpath:str):
@@ -175,41 +177,47 @@ class Scraper:
           
     def scrape_per_country(self, dict_of_countries):
         '''
+        navigate to the holiday url and create the holiday data object
+        gets the datails and assign them to the dict entry
+        create the list(dict.fromkeys(countries)path for saving the holiday
+        returns nothing
         Scrape the holiday data
         '''
         for country in dict_of_countries:
-            for url in range(len(dict_of_countries[country])):
-                #navigate to the holiday url and create the holiday data object
+            for index, url in enumerate(dict_of_countries[country]):
                 self.driver.get(dict_of_countries[country][url])                 
                 current_holiday = self.Holiday()
-            #get the datails and assign them to the dict entry
                 scraped_holiday = self.get_holiday_details(current_holiday, country)
-                #create the list(dict.fromkeys(countries)path for saving the holiday
                 holiday_json_name = 'data.json'
-                holiday_path = os.path.join("raw_data", f'{current_holiday.get_detail("uuid")}')  
-                image_path = os.path.join(holiday_path, "images")
+                holiday_path = os.path.join("raw_data", f'{current_holiday.get_detail("uuid")}')
                 os.mkdir(holiday_path)
+                image_path = os.path.join(holiday_path, "images")
                 os.mkdir(image_path)
-
                 self.save_to_json(scraped_holiday.details, holiday_json_name, holiday_path)
+
+                json_data = json.dump(scraped_holiday.details, indent = 4)
+                json_cleaned = aws.clean(json_data)
+                if aws.check_database_for_duplicate(json_cleaned):
+                    aws.send_to_rds(json_cleaned)
+
                 self.scrape_3_images(current_holiday,image_path)
     
     def scrape_3_images(self, Holiday:object, folder_path):
         '''
-        Scrape 3 images for each holiday
+        Scrape 3 images for each holiday into an image folder within the uuid folder created in scrape_per_country
         '''
         images:list = Holiday.get_detail('images')
         for i in range(3):
             image_link = images[i]
             image_name = f"{Holiday.get_detail('uuid')}" + "_" + str(i) + ".jpg"
-            os.mkdir
             path = os.path.join(folder_path ,image_name)
             urlretrieve(image_link, path)
             time.sleep(random.randint(0,3))
 
     def get_holiday_details(self, holiday:object, country: str):
         '''
-        Method to collect all details for the holiday from the webpage
+        This method collects details from each holiday url
+
         '''
         #all non details containers (including locations)
         location_container = '//div[@class="hotel-info bg-white shadow"]'
@@ -285,7 +293,6 @@ class Scraper:
             print("Date String Failed at " + self.driver.current_url())
             raise KeyError
 
-
     def remove_chars_convert_to_int(self, input):
         '''
         remove characters to convert strings from get_attribute("innerText") to ints
@@ -299,7 +306,6 @@ class Scraper:
         else:
             new_int = int(sub(r'[^\d.]', '', input))
             return new_int
-
             
     def check_family_holiday(self, no_people:str):
         '''
@@ -324,18 +330,11 @@ class Scraper:
         '''
         Main Scraping of the program
         '''
-        
         self.accept_cookies('onetrust-accept-btn-handler')
         try:
-            #scrape a new dictionary, comment out these three lines to scrape from preexisting dict -- testing
             country_dict = self.dict_countries()
             url_dict = self.get_holidays_from_country(country_dict)
-            self.save_to_json(url_dict, "holiday_url_dict.json", "raw_data/src")
-            
-            #Allow to scrap from stored json e.g. for custom smaller or specific scrapes and testing
-            #url_dict = self.load_from_json("json_dumps/holiday_url_dict.json", dict)
             self.scrape_per_country(url_dict)
-
         finally:
             print("Scrape Complete")
             self.driver.quit()
