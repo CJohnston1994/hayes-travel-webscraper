@@ -2,7 +2,6 @@ from dataclasses import dataclass
 from genericpath import exists
 from re import sub
 from urllib.request import urlretrieve
-from pyparsing import Optional
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver import Chrome
@@ -13,7 +12,7 @@ from selenium.webdriver.chrome.service import Service
 import os, json, uuid, time, random, aws
 
 class Scraper:
-    def __init__(self, url:str, auto_scrape:bool = False):
+    def __init__(self, url:str, autoscrape:bool = False):
         self.URL = url
         options = Options()
         options.add_argument("--headless")
@@ -23,11 +22,11 @@ class Scraper:
         data_handler = aws.DataHandler()
         if not exists("raw_data"):
             os.mkdir("raw_data")
-        if auto_scrape:
+        if autoscrape:
             self.begin_scrape()
 
     @dataclass
-    class Holiday():
+    class __Holiday():
         details = {
         "url": str,
         "uuid": str,
@@ -50,7 +49,7 @@ class Scraper:
             except:
                 print(f"Detail not foind: {detail}")
 
-    def accept_cookies(self, xpath):
+    def _accept_cookies(self, xpath):
         '''
         Finds the Accept Cookies Button, waits for it to be clickable and then clicks it
         '''
@@ -63,7 +62,7 @@ class Scraper:
         except:
             return False
 
-    def remove_dict_keys_from_list(self, dict:dict, list:list):
+    def __remove_dict_keys_from_list(self, dict:dict, list:list):
         '''
         remove all dict entries form a list passed in, this list should be empty keys
         '''
@@ -71,7 +70,7 @@ class Scraper:
             dict.pop(i,None)
         return dict
 
-    def dict_countries(self):
+    def _dict_countries(self):
         '''
         Creates a dictionary, using the destination as a key and the URL as the value
         '''
@@ -85,7 +84,7 @@ class Scraper:
         self.save_to_json(countries, 'country_urls.json', 'json_data/src')
         return countries
     
-    def get_holidays_from_country(self, dict_of_countries:dict):
+    def _get_holidays_from_country(self, dict_of_countries:dict):
         '''
         Takes the country url dict and gets all the holidays hrefs from the urls for the countries
         '''
@@ -121,7 +120,7 @@ class Scraper:
         self.save_to_json(dict_of_countries, "holiday_url_dict.json", "json_data/")
         return dict_of_countries
 
-    def find_href(self, url:str, xpath:str):
+    def _find_href(self, url:str, xpath:str):
         '''
         finds hrefs on a given url using the xpath and returns a list of the hrefs 
         '''
@@ -133,7 +132,7 @@ class Scraper:
             href_list.append(dest_link)
         return href_list
 
-    def save_to_json(self, data, file_name:str, folder_path:str, ):
+    def __save_to_json(self, data, file_name:str, folder_path:str, ):
         '''
         save a file as a json, with a specific path
         '''
@@ -161,7 +160,7 @@ class Scraper:
         except:
             print(f'Failed to save: {file_name} as JSON')
         
-    def load_from_json(self, file_name:str, expected:type):
+    def __load_from_json(self, file_name:str, expected:type):
         '''
         load data from json for testing scrape
         '''
@@ -175,7 +174,7 @@ class Scraper:
         except TypeError:
                print("Data retrieval of file: ", file_name, " failed, incorrect type")
           
-    def scrape_per_country(self, dict_of_countries):
+    def __scrape_per_country(self, dict_of_countries:dict):
         '''
         navigate to the holiday url and create the holiday data object
         gets the datails and assign them to the dict entry
@@ -183,6 +182,8 @@ class Scraper:
         returns nothing
         Scrape the holiday data
         '''
+        scraped_images = aws.images_already_scraped()
+
         for country in dict_of_countries:
             for index, url in enumerate(dict_of_countries[country]):
                 self.driver.get(dict_of_countries[country][url])                 
@@ -200,21 +201,24 @@ class Scraper:
                 if aws.check_database_for_duplicate(json_cleaned):
                     aws.send_to_rds(json_cleaned)
 
-                self.scrape_3_images(current_holiday,image_path)
+                self.scrape_3_images(current_holiday,image_path, scraped_images)
     
-    def scrape_3_images(self, Holiday:object, folder_path):
+    def __scrape_3_images(self, Holiday:object, folder_path, scraped_images:list):
         '''
         Scrape 3 images for each holiday into an image folder within the uuid folder created in scrape_per_country
         '''
         images:list = Holiday.get_detail('images')
         for i in range(3):
-            image_link = images[i]
-            image_name = f"{Holiday.get_detail('uuid')}" + "_" + str(i) + ".jpg"
-            path = os.path.join(folder_path ,image_name)
-            urlretrieve(image_link, path)
-            time.sleep(random.randint(0,3))
+            if images[i] in scraped_images[:]:
+                image_link = images[i]
+                image_name = f"{Holiday.get_detail('uuid')}" + "_" + str(i) + ".jpg"
+                path = os.path.join(folder_path ,image_name)
+                urlretrieve(image_link, path)
+                time.sleep(random.randint(0,3))
+            else:
+                continue
 
-    def get_holiday_details(self, holiday:object, country: str):
+    def __get_holiday_details(self, holiday:object, country: str):
         '''
         This method collects details from each holiday url
 
@@ -259,7 +263,7 @@ class Scraper:
             "images": images}
         return holiday
 
-    def convert_str_to_datetime(self, date_string:str):
+    def __convert_str_to_datetime(self, date_string:str):
         '''
         convert string read form XPATH to a datetime format
         '''
@@ -293,7 +297,7 @@ class Scraper:
             print("Date String Failed at " + self.driver.current_url())
             raise KeyError
 
-    def remove_chars_convert_to_int(self, input):
+    def __remove_chars_convert_to_int(self, input):
         '''
         remove characters to convert strings from get_attribute("innerText") to ints
         '''
@@ -307,7 +311,7 @@ class Scraper:
             new_int = int(sub(r'[^\d.]', '', input))
             return new_int
             
-    def check_family_holiday(self, no_people:str):
+    def __check_family_holiday(self, no_people:str):
         '''
         if there are Adults and children in a holiday deal split this into a list of 2 entries
         to be converted into ints
@@ -315,7 +319,7 @@ class Scraper:
         people = no_people.split(' + ')
         return people
         
-    def find_holiday_detail(self, container:str, element_xpath:str):
+    def _find_holiday_detail(self, container:str, element_xpath:str):
         '''
         Find details by relative xpath given xpath
         '''
