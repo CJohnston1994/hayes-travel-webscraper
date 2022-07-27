@@ -12,14 +12,15 @@ from selenium.webdriver.chrome.service import Service
 import os, json, uuid, time, random, aws
 
 class Scraper:
-    def __init__(self, url:str, autoscrape:bool = False):
+    def __init__(self, url:str, autoscrape:bool = True):
         self.URL = url
         options = Options()
         options.add_argument("--headless")
         self.driver = Chrome(service=Service(ChromeDriverManager().install()), options = options)
         self.driver.get(self.URL)
         self.wait = WebDriverWait(self.driver, 10)
-        data_handler = aws.DataHandler()
+        self.data_handler = aws.DataHandler('raw_data')
+            
         if not exists("raw_data"):
             os.mkdir("raw_data")
         if autoscrape:
@@ -90,16 +91,20 @@ class Scraper:
         '''
         #initialize/clear the list of countries without holidays
         countries_without_holidays = []
+        holiday_list = []
         #xpaths for the current project. Can be changed per site
         holiday_xpath = '//a[@class = "more color-white bg-yellow font-gotham"]'
         city_xpath = '//a[@class = "item shadow"]'
 
+        for key, value in dict_of_countries.items():
+            holiday_list.append(value)
+
         #loop throught the countries gathered from the site
-        for country in dict_of_countries:
+        for holiday in holiday_list:
             list_of_holidays = []
             try:
                 #set the link of the holiday
-                dest_link = dict_of_countries[country]
+                dest_link = dict_of_countries[holiday]
                 #find the href attributess
                 list_of_holidays = self._find_href(dest_link, holiday_xpath)
                 #if there are no holidays available try looking for cities (site layout inconsistant)
@@ -110,15 +115,15 @@ class Scraper:
                         list_of_holidays = self._find_href(city, holiday_xpath)
                 #if there are still no entries, set the 
                 if len(list_of_holidays) < 1:
-                    countries_without_holidays.append(country)
+                    countries_without_holidays.append(holiday)
                 #assign the list to the current country in the dict
-                dict_of_countries[country] = list_of_holidays
+                holiday_list[holiday] = list_of_holidays
             except TypeError:
-                return dict_of_countries
+                return holiday_list
         #remove keys with no values
-        dict_of_countries =  self.__remove_dict_keys_from_list(dict_of_countries, countries_without_holidays)
-        self._save_to_json(dict_of_countries, "holiday_url_dict.json", "json_data/")
-        return dict_of_countries
+        holiday_list =  self.__remove_dict_keys_from_list(holiday_list, countries_without_holidays)
+        self._save_to_json(holiday_list, "holiday_url_dict.json", "json_data/")
+        return holiday_list
 
     def _find_href(self, url:str, xpath:str):
         '''
@@ -172,7 +177,7 @@ class Scraper:
             else:
                 raise TypeError
         except TypeError:
-               print("Data retrieval of file: ", file_name, " failed, incorrect type")
+               print("Data retrieval of file: ", file_name, " failed, incorrect type: ", type(data))
           
     def __scrape_per_country(self, dict_of_countries:dict):
         '''
@@ -225,12 +230,13 @@ class Scraper:
         '''
         #all non details containers (including locations)
         location_container = '//div[@class="hotel-info bg-white shadow"]'
+        country_base = '//a[@class="btn bg-yellow color-white"]'
         url = self.driver.current_url
         holiday_id = str(uuid.uuid4())
         deterministic_id = url.replace("https://www.haystravel.co.uk/","")
         hotel = self._find_holiday_detail(location_container, '/h1')
         resort = self._find_holiday_detail(location_container, '/div[2]')
-        holiday_country = country
+        holiday_country = self._find_holiday_detail(country_base, '//*[@id="destination-one-content"]/div[3]/div/a')
 
         #detail container fields
         details_container = '//div[@class="text"]'
@@ -332,6 +338,12 @@ class Scraper:
             return element.get_attribute("innerText")
         except:
             print("element not found")
+    
+    def _scrape_country(self):
+        country_element = self._find_holiday_detail('','//*[@id="destination-one-content"]/div[3]/div/a')
+        inner_text = country_element.strip().split("\n")
+        country = inner_text[0].replace("View ", "")
+        return country
 
     def run_scraper(self):
         '''
@@ -342,6 +354,7 @@ class Scraper:
             country_dict = self._dict_countries()
             url_dict = self._get_holidays_from_country(country_dict)
             self.__scrape_per_country(url_dict)
+
         finally:
             print("Scrape Complete")
             self.driver.quit()

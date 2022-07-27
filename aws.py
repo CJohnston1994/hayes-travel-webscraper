@@ -2,21 +2,21 @@ import os, json, psycopg2, boto3
 from sys import prefix
 import pandas as pd
 from sqlalchemy import create_engine
-from my_passwords import PASSWORD as pw
+import my_passwords
 
 class DataHandler:
-    def __init__(self):
+    def __init__(self, raw_data_path):
         self.s3_client = boto3.resource('s3')
-        self.raw_data = os.listdir('raw_data')
-        os.chdir('raw_data')
+        self.raw_data = os.listdir(raw_data_path)
+        os.chdir(raw_data_path)
         self.base_dir = os.getcwd()
         self.total_seen_list = []
 
         DATABASE_TYPE = 'postgresql'
         DBAPI = 'psycopg2'
-        HOST = 'hayes-travel-scraper.c3deqrfbkahl.us-east-1.rds.amazonaws.com'
+        HOST = my_passwords.HOST
         USER = 'postgres'
-        PASSWORD = pw
+        PASSWORD = my_passwords.PASSWORD
         DATABASE = 'holiday_database'
         PORT = 5432
         self.engine = create_engine(f"{DATABASE_TYPE}+{DBAPI}://{USER}:{PASSWORD}@{HOST}:{PORT}/{DATABASE}")
@@ -87,12 +87,12 @@ class DataHandler:
             return True
         
     def _images_already_scraped(self, holiday_details):
-        image_list = []
+        scraped_images = []
         my_bucket = self.s3_client.Bucket('hayes-travel-web-scraper')
         for file in my_bucket.objects.filter():
             if 'data.json' in file.key:
                 content = file.get()['Body']
                 json_content = json.load(content)
                 scraped_url = json_content["images"]
-                image_list += scraped_url
-        return image_list
+                scraped_images += scraped_url
+        return scraped_images
