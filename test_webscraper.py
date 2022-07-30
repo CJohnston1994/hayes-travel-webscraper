@@ -69,19 +69,6 @@ class WebscraperTestCase(unittest.TestCase):
         self.assertListEqual([test_file_name], value)
         self.assertFalse(file_exists("/fakepath/tofile/", test_file_name))
 
-    #@unittest.skip
-    def test_get_holiday_details(self):
-        self.test_scraper.driver.get("https://www.haystravel.co.uk/fosshotel-baron-reykjavik")
-        compare_holiday = self.test_scraper._Holiday()
-        compare_holiday.details = self.test_scraper._load_from_json("tests/test/data.json", dict)
-        current_holiday = self.test_scraper._Holiday()
-        current_holiday = self.test_scraper._get_holiday_details(current_holiday, compare_holiday.details["country"])
-
-        for detail in current_holiday.details:
-            if detail == "uuid":
-                continue
-            self.assertEqual(current_holiday.details[detail], compare_holiday.details[detail])
-    
     @unittest.skip
     def test_remove_chars_convert_to_int(self):
         test_case_1 = ["2 Adults"]

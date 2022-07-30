@@ -187,12 +187,13 @@ class Scraper:
         returns nothing
         Scrape the holiday data
         '''
-        scraped_images = aws.images_already_scraped()
+        scraped_images = aws._images_already_scraped()
 
         for country in dict_of_countries:
             for index, url in enumerate(dict_of_countries[country]):
                 self.driver.get(dict_of_countries[country][url])                 
-                current_holiday = self.Holiday()
+                current_holiday = self._Holiday()
+                current_holiday["country"] = country
                 scraped_holiday = self._get_holiday_details(current_holiday, country)
                 holiday_json_name = 'data.json'
                 holiday_path = os.path.join("raw_data", f'{current_holiday.get_detail("uuid")}')
@@ -223,7 +224,7 @@ class Scraper:
             else:
                 continue
 
-    def _get_holiday_details(self, holiday:object, country: str):
+    def __get_holiday_details(self, holiday:object, country: str):
         '''
         This method collects details from each holiday url
 
@@ -339,12 +340,6 @@ class Scraper:
         except:
             print("element not found")
     
-    def _scrape_country(self):
-        country_element = self._find_holiday_detail('','//*[@id="destination-one-content"]/div[3]/div/a')
-        inner_text = country_element.strip().split("\n")
-        country = inner_text[0].replace("View ", "")
-        return country
-
     def run_scraper(self):
         '''
         Main Scraping of the program
