@@ -1,6 +1,14 @@
+# Extensions
 **/*.jpg
+*.ipynb
+
+# File Paths
 raw_data/*
 mydb/*
+
+# Exceptions
 !raw_data/src
 !tests/test/*.jpg
-devtest.ipynb
+
+# Specific files/names 
+my_passwords.*
