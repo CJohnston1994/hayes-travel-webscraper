@@ -5,11 +5,8 @@ from sqlalchemy import create_engine
 import my_passwords
 
 class DataHandler:
-    def __init__(self, raw_data_path):
+    def __init__(self, raw_data):
         self.s3_client = boto3.resource('s3')
-        self.raw_data = os.listdir(raw_data_path)
-        os.chdir(raw_data_path)
-        self.base_dir = os.getcwd()
         self.total_seen_list = []
 
         DATABASE_TYPE = 'postgresql'
@@ -21,35 +18,31 @@ class DataHandler:
         PORT = 5432
         self.engine = create_engine(f"{DATABASE_TYPE}+{DBAPI}://{USER}:{PASSWORD}@{HOST}:{PORT}/{DATABASE}")
 
-    def _upload(self, ):
+    def _upload_data(self, raw_data):
         '''
         Upload all data and check for duplicate entries
         '''
-            
-        for folder in self.raw_data:
-            os.chdir(folder)
-            file_name = os.path.join("raw_data", folder, 'data.json')
-            self.s3_client.upload_file('data.json', 'hayes-travel-web-scraper', file_name)
-            image_path = os.path.join("raw_data", folder, 'images')
-            os.chdir('images')
-            for image in os.listdir():
-                image_file_name = os.path.join("raw_data",folder,image)
-                self.s3_client.upload_file(image, 'hayes-travel-web-scraper', image_file_name)
-            os.chdir(self.base_dir)
+        
+        file_name = os.path.join("raw_data", raw_data["uuid"], 'data.json')
+        self.s3_client.upload_file('data.json', 'hayes-travel-web-scraper', file_name)   
+        
 
-    def _not_in_seen_list(self, json_data):
+    def __not_in_seen_list(self, json_data):
         '''
-        Add json datas to a seenlist and do no add if they match an existing element
+        Add json data to a seenlist and do not add if they match an existing element
         '''
         #check all elements in the list against the json
-        for element in self.total_seen_list:
-            if json_data['human_id' and 'next_date'] == element['human_id' and 'next_date']:
-                return False
-            else:
-                self.seen_list.append()
-        return True
+        humanId_list = any(json_data['human_id'] for _ in self.total_seen_list)
+        next_date_list = any(json_data['next_date'] for _ in self.total_seen_list)
 
-    def _send_to_rds(self, json_data):
+        if humanId_list and next_date_list:
+            return False
+        else:
+            self.seen_list.append()
+        return True
+   
+
+    def __send_data_to_rds(self, json_data):
         self.engine.connect()
 
         with open(json_data) as json_data:
@@ -59,7 +52,7 @@ class DataHandler:
             if self.not_in_seen_list(new_json):
                 new_json.to_sql('hayes-holiday',index=True, con=self.engine, if_exists='append')
 
-    def _clean(self, json_item):
+    def __clean(self, json_item):
         json_item['adults/children'] = sum(json_item['adults/children'])
         if json_item['adults/children'] == 22:
             json_item['adults/children'] = 4
@@ -77,22 +70,44 @@ class DataHandler:
 
         return json_item
 
-    def _check_database_for_duplicate(self, holiday_details):
+    def __check_rds_for_duplicate(self, cleaned_data):
+        self.s3_client()
+
+    def __check_database_for_duplicate(self, cleaned_data):
         with psycopg2.connection.cursor as curs:
             curs.execute('''SELECT human_id, next_date
                         FROM 'hayes_holiday'            
             ''')
         records = curs.fetchall()
-        if holiday_details['uuid'] and holiday_details['next_date'] in records:
+        if cleaned_data['uuid'] and cleaned_data['next_date'] in records:
             return True
-        
-    def _images_already_scraped(self, holiday_details):
+
+    def __upload_images(self, raw_data):
+        os.chdir('images')
+        for image in os.listdir():
+            image_file_name = os.path.join("raw_data",raw_data["uuid"],image)
+            self.s3_client.upload_file(image, 'hayes-travel-web-scraper', image_file_name)
+        os.chdir(self.base_dir)        
+
+    def _images_already_scraped(self, bucket):
         scraped_images = []
-        my_bucket = self.s3_client.Bucket('hayes-travel-web-scraper')
-        for file in my_bucket.objects.filter():
+        for file in bucket.objects.filter():
             if 'data.json' in file.key:
                 content = file.get()['Body']
                 json_content = json.load(content)
                 scraped_url = json_content["images"]
                 scraped_images += scraped_url
         return scraped_images
+
+    def processs_data(self, raw_data):
+        clean_data = self.__clean(raw_data)
+        my_bucket = self.s3_client.Bucket('hayes-travel-web-scraper')
+        if clean_data['uuid'] not in my_bucket.objects.filter():
+            self.__send_data_to_rds(clean_data)
+        if not self.__check_database_for_duplicate(clean_data):
+            self._upload_data(clean_data)
+
+        
+
+    def process_images(self, images):
+        scraped_images = self.__images_already_scraped()

@@ -47,7 +47,7 @@ class Scraper:
         def get_detail(self, detail:str):
             try:
                 return self.details[detail]
-            except:
+            except Exception:
                 print(f"Detail not foind: {detail}")
 
     def _accept_cookies(self, xpath):
@@ -60,7 +60,7 @@ class Scraper:
             time.sleep(1)
             cookies_btn.click()
             return True
-        except:
+        except Exception:
             return False
 
     def __remove_dict_keys_from_list(self, dict:dict, list:list):
@@ -91,14 +91,11 @@ class Scraper:
         '''
         #initialize/clear the list of countries without holidays
         countries_without_holidays = []
-        holiday_list = []
         #xpaths for the current project. Can be changed per site
         holiday_xpath = '//a[@class = "more color-white bg-yellow font-gotham"]'
         city_xpath = '//a[@class = "item shadow"]'
 
-        for key, value in dict_of_countries.items():
-            holiday_list.append(value)
-
+        holiday_list = list(dict_of_countries.values())
         #loop throught the countries gathered from the site
         for holiday in holiday_list:
             list_of_holidays = []
@@ -151,18 +148,16 @@ class Scraper:
         try:
             os.chdir(dir_path)
             #check that the data is list or dict to dump
-            if isinstance(data, dict) or isinstance(data, list):
+            if isinstance(data, (dict, list)):
                 with open(file_name, 'w') as outfile:
                     #json_object = json.loads(data)                    
                     json.dump(data, outfile, indent = 4 )
-            #strings will be written to the outfile
             else:
                 with open(file_name, 'w') as outfile:
                     json.write(data)
                 #cd to the starting directory
             os.chdir(starting_directory)
-        #print a message if it fails
-        except:
+        except Exception:
             print(f'Failed to save: {file_name} as JSON')
         
     def _load_from_json(self, file_name:str, expected:type):
@@ -186,28 +181,36 @@ class Scraper:
         create the list(dict.fromkeys(countries)path for saving the holiday
         returns nothing
         Scrape the holiday data
+        nested for loop is used to set country as it was not reliably scrapable from
+        the holiday url itslef
         '''
         scraped_images = aws._images_already_scraped()
 
+        #prep for saving
+        holiday_json_name = 'data.json'
         for country in dict_of_countries:
-            for index, url in enumerate(dict_of_countries[country]):
-                self.driver.get(dict_of_countries[country][url])                 
+            for url in dict_of_countries[country]:
+                # scrapes details
+                self.driver.get(dict_of_countries[country][url])
                 current_holiday = self._Holiday()
                 current_holiday["country"] = country
                 scraped_holiday = self._get_holiday_details(current_holiday, country)
-                holiday_json_name = 'data.json'
+
                 holiday_path = os.path.join("raw_data", f'{current_holiday.get_detail("uuid")}')
                 os.mkdir(holiday_path)
                 image_path = os.path.join(holiday_path, "images")
                 os.mkdir(image_path)
                 self._save_to_json(scraped_holiday.details, holiday_json_name, holiday_path)
 
+                #cleaned and uploaded
                 json_data = json.dump(scraped_holiday.details, indent = 4)
+                cleaner = aws.DataHandler(json_data)
                 json_cleaned = aws.clean(json_data)
                 if aws.check_database_for_duplicate(json_cleaned):
                     aws.send_to_rds(json_cleaned)
-
-                self.__scrape_3_images(current_holiday,image_path, scraped_images)
+                
+                if current_holiday['images'] not in scraped_holiday:
+                    self.__scrape_3_images(current_holiday,image_path, scraped_images)
     
     def __scrape_3_images(self, Holiday:object, folder_path, scraped_images:list):
         '''
@@ -217,13 +220,13 @@ class Scraper:
         for i in range(3):
             if images[i] in scraped_images[:]:
                 image_link = images[i]
-                image_name = f"{Holiday.get_detail('uuid')}" + "_" + str(i) + ".jpg"
+                image_name = f"{Holiday.get_detail('uuid')}_{str(i)}.jpg"
                 path = os.path.join(folder_path ,image_name)
                 urlretrieve(image_link, path)
                 time.sleep(random.randint(0,3))
             else:
                 continue
-
+        
     def __get_holiday_details(self, holiday:object, country: str):
         '''
         This method collects details from each holiday url
@@ -297,12 +300,11 @@ class Scraper:
             new_date[1] = month[new_date[1].capitalize()]
             new_date.reverse()
             #convert the month to numberdate
-            new_date = "-".join(new_date)
-            
+            new_date = "-".join(new_date)            
             return new_date
-        except KeyError:
-            print("Date String Failed at " + self.driver.current_url())
-            raise KeyError
+        except KeyError as e:
+            print(f"Date String Failed at {self.driver.current_url()}")
+            raise KeyError from e
 
     def _remove_chars_convert_to_int(self, input):
         '''
@@ -311,8 +313,8 @@ class Scraper:
         leaving us with only numbers which are converted to integers. This handles
         both strings and lists of strings
         '''
-        new_int_list = []
         if isinstance(input, list):
+            new_int_list = []
             for i in range(len(input)):
                 new_int = sub(r'[^\d.]', '', input[i])
                 new_int_list.append(new_int)
@@ -326,8 +328,7 @@ class Scraper:
         if there are Adults and children in a holiday deal split this into a list of 2 entries
         to be converted into ints
         '''
-        people = no_people.split(' + ')
-        return people
+        return no_people.split(' + ')
         
     def _find_holiday_detail(self, container:str, element_xpath:str):
         '''
@@ -337,7 +338,7 @@ class Scraper:
             path = container + element_xpath
             element = self.driver.find_element(By.XPATH, path)
             return element.get_attribute("innerText")
-        except:
+        except Exception:
             print("element not found")
     
     def run_scraper(self):
