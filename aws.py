@@ -1,3 +1,4 @@
+from distutils.command.config import config
 import os, json, psycopg2, boto3
 from sys import prefix
 import pandas as pd
@@ -5,7 +6,7 @@ from sqlalchemy import create_engine
 import my_passwords
 
 class DataHandler:
-    def __init__(self, raw_data):
+    def __init__(self):
         self.s3_client = boto3.resource('s3')
         self.total_seen_list = []
 
@@ -16,7 +17,7 @@ class DataHandler:
         PASSWORD = my_passwords.PASSWORD
         DATABASE = 'holiday_database'
         PORT = 5432
-        self.engine = create_engine(f"{DATABASE_TYPE}+{DBAPI}://{USER}:{PASSWORD}@{HOST}:{PORT}/{DATABASE}")
+        self.engine = config.engine
 
     def _upload_data(self, raw_data):
         '''
@@ -26,7 +27,6 @@ class DataHandler:
         file_name = os.path.join("raw_data", raw_data["uuid"], 'data.json')
         self.s3_client.upload_file('data.json', 'hayes-travel-web-scraper', file_name)   
         
-
     def __not_in_seen_list(self, json_data):
         '''
         Add json data to a seenlist and do not add if they match an existing element
@@ -40,7 +40,7 @@ class DataHandler:
         else:
             self.seen_list.append()
         return True
-   
+
 
     def __send_data_to_rds(self, json_data):
         self.engine.connect()
@@ -89,7 +89,7 @@ class DataHandler:
             self.s3_client.upload_file(image, 'hayes-travel-web-scraper', image_file_name)
         os.chdir(self.base_dir)        
 
-    def _images_already_scraped(self, bucket):
+    def images_already_scraped(self, bucket):
         scraped_images = []
         for file in bucket.objects.filter():
             if 'data.json' in file.key:
@@ -107,7 +107,6 @@ class DataHandler:
         if not self.__check_database_for_duplicate(clean_data):
             self._upload_data(clean_data)
 
-        
-
-    def process_images(self, images):
-        scraped_images = self.__images_already_scraped()
+    def process_images(self, path : str):        
+        if self.images_already_scraped(path):
+            self.__upload_images()
