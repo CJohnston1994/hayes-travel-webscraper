@@ -1,6 +1,8 @@
 # Extensions
 **/*.jpg
 *.ipynb
+__pycache__/*
+gpg
 
 # File Paths
 raw_data/*
@@ -12,3 +14,5 @@ mydb/*
 
 # Specific files/names 
 my_passwords.*
+mypasswords.yml
+__pycache__/*

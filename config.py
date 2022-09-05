@@ -1,4 +1,3 @@
-from telnetlib import DET
 import my_passwords
 from sqlalchemy import create_engine
 

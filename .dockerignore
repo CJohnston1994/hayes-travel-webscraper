@@ -1,0 +1,9 @@
+#ignore everything
+*
+
+#allow files and directories
+!/*.py
+!/src
+!/requirements.txt
+
+# Exceptions to the above

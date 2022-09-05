@@ -1,4 +1,6 @@
-import os, json, psycopg2, boto3, unittest
+import json, unittest
+from unittest import main, TestCase
+from unittest.mock import mock
 from aws import DataHandler
 from sys import prefix
 import pandas as pd
@@ -6,15 +8,17 @@ from sqlalchemy import create_engine
 
 class AWSTestCase(unittest.TestCase):
     def setUp(self) -> None:
-        data = json.load('tests/test/data.json')
-        self.handler = DataHandler(data)
+        self.data = json.load('tests/test/data.json')
+        self.handler = DataHandler()
         return super().setUp()
 
-    
-    def test_process_data(self):
+    @mock.patch('2.WEBSCRAPER.aws.DataHandler')
+    def test_process_data(self, mock_check_data):
         '''
         test for process_data method
         '''
+        self.handler.process_data()
+
     
     def test_process_images(self):
         '''

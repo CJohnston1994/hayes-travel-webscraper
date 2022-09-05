@@ -1,23 +1,30 @@
-from distutils.command.config import config
-import os, json, psycopg2, boto3
+from distutils import core
+import config, os, json, psycopg2, boto3
 from sys import prefix
 import pandas as pd
 from sqlalchemy import create_engine
-import my_passwords
+import my_passwords as pw
+import yaml
+'''
 
+
+'''
 class DataHandler:
     def __init__(self):
         self.s3_client = boto3.resource('s3')
         self.total_seen_list = []
+        with open('mypasswords.yml') as mypasswd:
+            credentials = yaml.safe_load(mypasswd)
+            HOST = credentials['HOST']
+            PASSWORD = credentials['PASSWORD']
+            DATABASE_TYPE = credentials['DATABASE_TYPE']
+            DBAPI =  credentials['DBAPI']
+            USER = credentials['USER']
+            DATABASE = credentials['DATABASE']
+            PORT = credentials['PORT']
+        self.engine = config.ENGINE
 
-        DATABASE_TYPE = 'postgresql'
-        DBAPI = 'psycopg2'
-        HOST = my_passwords.HOST
-        USER = 'postgres'
-        PASSWORD = my_passwords.PASSWORD
-        DATABASE = 'holiday_database'
-        PORT = 5432
-        self.engine = config.engine
+
 
     def _upload_data(self, raw_data):
         '''
