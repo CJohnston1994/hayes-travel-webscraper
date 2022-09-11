@@ -3,7 +3,6 @@ import config, os, json, psycopg2, boto3
 from sys import prefix
 import pandas as pd
 from sqlalchemy import create_engine
-import my_passwords as pw
 import yaml
 '''
 
@@ -13,7 +12,7 @@ class DataHandler:
     def __init__(self):
         self.s3_client = boto3.resource('s3')
         self.total_seen_list = []
-        with open('mypasswords.yml') as mypasswd:
+        with open('my_passwords.yml') as mypasswd:
             credentials = yaml.safe_load(mypasswd)
             HOST = credentials['HOST']
             PASSWORD = credentials['PASSWORD']
@@ -22,8 +21,7 @@ class DataHandler:
             USER = credentials['USER']
             DATABASE = credentials['DATABASE']
             PORT = credentials['PORT']
-        self.engine = config.ENGINE
-
+        self.ENGINE = create_engine(f"{DATABASE_TYPE}+{DBAPI}://{USER}:{PASSWORD}@{HOST}:{PORT}/{DATABASE}")
 
 
     def _upload_data(self, raw_data):

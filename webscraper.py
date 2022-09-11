@@ -97,15 +97,15 @@ class Scraper:
         #xpaths for the current project. Can be changed per site
         holiday_xpath = config.HOLIDAY_XPATH
         city_xpath = config.CITY_XPATH
-        
-
-        holiday_list = list(dict_of_countries.values())
+    
         #loop throught the countries gathered from the site
-        for holiday in holiday_list:
+        
+        for country in dict_of_countries:
             list_of_holidays = []
+            print(country, dict_of_countries[country])
             try:
                 #set the link of the holiday
-                dest_link = holiday
+                dest_link = dict_of_countries[country]
                 #find the href attributes
                 list_of_holidays = self._find_href(dest_link, holiday_xpath)
                 #if there are no holidays available try looking for cities (site layout inconsistant)
@@ -116,15 +116,15 @@ class Scraper:
                         list_of_holidays = self._find_href(city, holiday_xpath)
                 #if there are still no entries, set the country to be removed from the dict
                 if len(list_of_holidays) < 1:
-                    countries_without_holidays.append(holiday)
+                    countries_without_holidays.append(country)
                 #assign the list to the current country in the dict
-                holiday_list[holiday] = list_of_holidays
+                dict_of_countries[country] = list_of_holidays
             except TypeError:
-                return holiday_list
+                return dict_of_countries
         #remove keys with no values
-        holiday_list =  self.__remove_dict_keys_from_list(holiday_list, countries_without_holidays)
-        self._save_to_json(holiday_list, "holiday_url_dict.json", "json_data/")
-        return holiday_list
+        dict_of_countries =  self.__remove_dict_keys_from_list(dict_of_countries, countries_without_holidays)
+        self._save_to_json(dict_of_countries, "holiday_url_dict.json", "json_data/")
+        return dict_of_countries
 
     def _find_href(
                 self, 
@@ -195,13 +195,15 @@ class Scraper:
 
         #prep for saving
         holiday_json_name = 'data.json'
-        for country in dict_of_countries:
-            for holiday in country:
+        countries = dict_of_countries.keys()
+        for country in countries:
+            for holiday in dict_of_countries[country]:
+                print(country, holiday)
             # scrapes details
-                self.driver.get(dict_of_countries[country][holiday])
-                current_holiday = self._Holiday()
+                self.driver.get(holiday)
+                current_holiday = self._Holiday(self.__get_holiday_details)
                 current_holiday["country"] = country
-                scraped_holiday = self._get_holiday_details(current_holiday, country)
+                scraped_holiday = self.__get_holiday_details(current_holiday, country)
 
                 holiday_path = os.path.join("raw_data", f'{current_holiday.get_detail("uuid")}')
                 os.mkdir(holiday_path)
@@ -366,7 +368,3 @@ class Scraper:
         url_dict = self._get_holidays_from_country(country_dict)
         self.__scrape_per_country(url_dict)
         print("Scrape Complete")
-'''        except Exception:
-            print("Couldn't scrape due to Error!")
-        finally:
-            self.driver.quit()'''
