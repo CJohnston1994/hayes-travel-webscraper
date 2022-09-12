@@ -2,8 +2,10 @@ from sqlalchemy import create_engine
 
 HOLIDAY_XPATH = '//a[@class = "more color-white bg-yellow font-gotham"]'
 CITY_XPATH = '//a[@class = "item shadow"]'
-LOCATION_CONTAINER_XPATH = '//a[@class = "div[@class="hotel-info bg-white shadow"]'
-DETAILS_CONTAINER_XPATH = '//a[@class = "div[@class="text"]'
+LOCATION_CONTAINER_XPATH = '//div[@class="hotel-info bg-white shadow"]'
+DETAILS_CONTAINER_XPATH = '//*[@class="text"]'
+
+# /html/body/div[4]/div/div/div[1]/div[3]/div[3]
 
 '''DATABASE_TYPE = 'postgresql'
 DBAPI = 'psycopg2'

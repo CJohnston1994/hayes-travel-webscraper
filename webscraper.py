@@ -29,19 +29,19 @@ class Scraper:
 
     @dataclass
     class _Holiday():
-        url: str
-        uuid: str
-        human_id: str
-        hotel: str
-        area: str
-        country: str
-        price: int
-        group_size:list
-        nights: int
-        catering: str
-        next_date: str
-        rating: float
-        images: list
+        url: str = None
+        uuid: str = None
+        human_id: str = None
+        hotel: str = None
+        area: str = None
+        country: str = None
+        price: int = None
+        group_size:list = None
+        nights: int = None
+        catering: str = None
+        next_date: str = None
+        rating: float = None
+        images: list = None
 
         def get_detail(self, detail: str):
             try:
@@ -201,19 +201,20 @@ class Scraper:
                 print(country, holiday)
             # scrapes details
                 self.driver.get(holiday)
-                current_holiday = self._Holiday(self.__get_holiday_details)
-                current_holiday["country"] = country
+                current_holiday = self._Holiday()
+                self.__get_holiday_details(current_holiday, country)
                 scraped_holiday = self.__get_holiday_details(current_holiday, country)
 
                 holiday_path = os.path.join("raw_data", f'{current_holiday.get_detail("uuid")}')
-                os.mkdir(holiday_path)
+                if not exists(holiday_path):
+                    os.mkdir(holiday_path)
                 image_path = os.path.join(holiday_path, "images")
-                os.mkdir(image_path)
-                self._save_to_json(scraped_holiday.details, holiday_json_name, holiday_path)
+                if not exists(image_path):
+                    os.mkdir(image_path)
+                self._save_to_json(scraped_holiday, holiday_json_name, holiday_path)
 
                 #cleaned and uploaded
-                json_data = json.dump(scraped_holiday.details, indent = 4)
-                
+                json_data = json.dumps(scraped_holiday, indent = 4)                
                 self.data_handler.process_data(json_data)
                 
                 if current_holiday['images'] not in scraped_holiday:
@@ -264,14 +265,14 @@ class Scraper:
         setattr(holiday, "uuid", str(uuid.uuid4()))
         setattr(holiday, "country", country)
         setattr(holiday, "human_id", deterministic_id)
-        setattr(holiday, "price", self._find_holiday_detail('',config.XPATH_DETAILS_DICTIONARY["price"][0]) )
+        setattr(holiday, "price", self._find_holiday_detail("", '//div[@class="price color-blue"]'))
         setattr(holiday, "group_size", self._remove_chars_convert_to_int(self._check_family_holiday(group_size)))
         setattr(holiday, "nights", self._remove_chars_convert_to_int(duration))
         setattr(holiday, "next_date", self._convert_str_to_datetime(soonest_departure))
         setattr(holiday, "images", images)
 
         #loop through the dict values in the config file and set attributes for each key
-        for key, value in config.XPATH_DETAILS_DICTIONARY:
+        for key, value in list(config.XPATH_DETAILS_DICTIONARY.items()):
             setattr(holiday, key, self._find_holiday_detail(value[0], value[1]))
        
         '''       

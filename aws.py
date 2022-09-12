@@ -14,12 +14,7 @@ class DataHandler:
         self.total_seen_list = []
         with open('my_passwords.yml') as mypasswd:
             credentials = yaml.safe_load(mypasswd)
-            HOST = credentials['HOST']
-            PASSWORD = credentials['PASSWORD']
-            DATABASE_TYPE = credentials['DATABASE_TYPE']
-            DBAPI =  credentials['DBAPI']
-            USER = credentials['USER']
-            DATABASE = credentials['DATABASE']
+            HOST = cprocess_data = credentials['DATABASE']
             PORT = credentials['PORT']
         self.ENGINE = create_engine(f"{DATABASE_TYPE}+{DBAPI}://{USER}:{PASSWORD}@{HOST}:{PORT}/{DATABASE}")
 
@@ -104,7 +99,7 @@ class DataHandler:
                 scraped_images += scraped_url
         return scraped_images
 
-    def processs_data(self, raw_data):
+    def process_data(self, raw_data):
         clean_data = self.__clean(raw_data)
         my_bucket = self.s3_client.Bucket('hayes-travel-web-scraper')
         if clean_data['uuid'] not in my_bucket.objects.filter():
