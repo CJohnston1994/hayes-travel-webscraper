@@ -1,4 +1,5 @@
 from sqlalchemy import create_engine
+import os
 
 HOLIDAY_XPATH = '//a[@class = "more color-white bg-yellow font-gotham"]'
 CITY_XPATH = '//a[@class = "item shadow"]'
@@ -7,14 +8,14 @@ DETAILS_CONTAINER_XPATH = '//*[@class="text"]'
 
 # /html/body/div[4]/div/div/div[1]/div[3]/div[3]
 
-'''DATABASE_TYPE = 'postgresql'
+DATABASE_TYPE = 'postgresql'
 DBAPI = 'psycopg2'
-HOST = my_passwords.HOST
+HOST = os.environ('HOST')
 USER = 'postgres'
-PASSWORD = my_passwords.PASSWORD
+PASSWORD = os.environ("PASSWORD")
 DATABASE = 'holiday_database'
 PORT = 5432
-ENGINE = create_engine(f"{DATABASE_TYPE}+{DBAPI}://{USER}:{PASSWORD}@{HOST}:{PORT}/{DATABASE}")'''
+ENGINE = create_engine(f"{DATABASE_TYPE}+{DBAPI}://{USER}:{PASSWORD}@{HOST}:{PORT}/{DATABASE}")
 
 XPATH_DETAILS_DICTIONARY = { 
     "hotel": [LOCATION_CONTAINER_XPATH , "/h1"],

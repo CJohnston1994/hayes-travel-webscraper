@@ -12,12 +12,16 @@ class DataHandler:
     def __init__(self):
         self.s3_client = boto3.resource('s3')
         self.total_seen_list = []
-        with open('my_passwords.yml') as mypasswd:
-            credentials = yaml.safe_load(mypasswd)
-            HOST = cprocess_data = credentials['DATABASE']
-            PORT = credentials['PORT']
-        self.ENGINE = create_engine(f"{DATABASE_TYPE}+{DBAPI}://{USER}:{PASSWORD}@{HOST}:{PORT}/{DATABASE}")
-
+        self.engine = config.ENGINE
+        '''with open('mypasswords.yml') as mypasswd:
+        credentials = yaml.safe_load(mypasswd)
+        HOST = credentials['HOST']
+        PASSWORD = credentials['PASSWORD']
+        DATABASE_TYPE = credentials['DATABASE_TYPE']
+        DBAPI =  credentials['DBAPI']
+        USER = credentials['USER']
+        DATABASE = credentials['DATABASE']
+        PORT = credentials['PORT']'''
 
     def _upload_data(self, raw_data):
         '''

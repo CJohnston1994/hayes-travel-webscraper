@@ -12,6 +12,7 @@ from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.chrome.service import Service
 import os, json, uuid, time, random, aws, config
 
+
 class Scraper:
     def __init__(self, url: str, autoscrape:bool = True ):
         self.URL = url
