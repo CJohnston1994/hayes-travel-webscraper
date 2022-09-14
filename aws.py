@@ -3,11 +3,7 @@ import config, os, json, psycopg2, boto3
 from sys import prefix
 import pandas as pd
 from sqlalchemy import create_engine
-import yaml
-'''
 
-
-'''
 class DataHandler:
     def __init__(self):
         self.s3_client = boto3.resource('s3')

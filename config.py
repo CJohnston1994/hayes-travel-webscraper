@@ -10,9 +10,11 @@ DETAILS_CONTAINER_XPATH = '//*[@class="text"]'
 
 DATABASE_TYPE = 'postgresql'
 DBAPI = 'psycopg2'
-HOST = os.environ('HOST')
+HOST = "hayes-travel-scraper.c3deqrfbkahl.us-east-1.rds.amazonaws.com"
+#HOST = os.environ['HOST']
 USER = 'postgres'
-PASSWORD = os.environ("PASSWORD")
+PASSWORD = "Nicole2005!"
+#PASSWORD = os.environ["PASSWORD"]
 DATABASE = 'holiday_database'
 PORT = 5432
 ENGINE = create_engine(f"{DATABASE_TYPE}+{DBAPI}://{USER}:{PASSWORD}@{HOST}:{PORT}/{DATABASE}")
@@ -22,6 +24,6 @@ XPATH_DETAILS_DICTIONARY = {
     "area": [LOCATION_CONTAINER_XPATH , "/div[2]"],
     "group_size": [DETAILS_CONTAINER_XPATH, '/div[1]//p'],
     "nights": [DETAILS_CONTAINER_XPATH, '/div[2]//p'],
-    "catering": ['', '/div[3]//p'],
+    "catering": [DETAILS_CONTAINER_XPATH, '/div[3]//p'],
     "rating": ['', '//span[@class = "rating-label"]']
     }

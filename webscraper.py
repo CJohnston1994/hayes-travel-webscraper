@@ -1,3 +1,4 @@
+from ast import Attribute
 from dataclasses import dataclass
 from genericpath import exists
 from re import sub
@@ -18,6 +19,8 @@ class Scraper:
         self.URL = url
         options = Options()
         options.add_argument("--headless")
+        options.add_argument('--no-sandbox')
+        options.add_argument('--disable-dev-shm-usage')
         self.driver = Chrome(service=Service(ChromeDriverManager().install()), options = options)
         self.driver.get(self.URL)
         self.wait = WebDriverWait(self.driver, 10)
@@ -46,9 +49,9 @@ class Scraper:
 
         def get_detail(self, detail: str):
             try:
-                return self.details[detail]
+                return self.detail
             except Exception as e:
-                print(f"Detail not foind: {detail}")
+                print(f"Detail not found: {detail}")
 
     def _accept_cookies(self, xpath) -> bool:
         '''
@@ -162,9 +165,8 @@ class Scraper:
                     #json_object = json.loads(data)                    
                     json.dump(data, outfile, indent = 4 )
             else:
-                with open(file_name, 'w') as outfile:
-                    json.write(data)
-                #cd to the starting directory
+                print(f"data for {dir_path} is not a list or dict")
+                raise TypeError
             os.chdir(starting_directory)
         except Exception as e:
             print(f'Failed to save: {file_name} as JSON\n Error: {e}')
@@ -199,19 +201,22 @@ class Scraper:
         countries = dict_of_countries.keys()
         for country in countries:
             for holiday in dict_of_countries[country]:
-                print(country, holiday)
             # scrapes details
                 self.driver.get(holiday)
+                print(1)
                 current_holiday = self._Holiday()
+                print(2)
+                
                 self.__get_holiday_details(current_holiday, country)
-                scraped_holiday = self.__get_holiday_details(current_holiday, country)
-
-                holiday_path = os.path.join("raw_data", f'{current_holiday.get_detail("uuid")}')
+                print(3)
+                print(current_holiday)
+                holiday_path = os.path.join("raw_data", f'{getattr(current_holiday, "uuid")}')
                 if not exists(holiday_path):
                     os.mkdir(holiday_path)
                 image_path = os.path.join(holiday_path, "images")
                 if not exists(image_path):
                     os.mkdir(image_path)
+                scraped_holiday = json.dump(dict(current_holiday), holiday_path)
                 self._save_to_json(scraped_holiday, holiday_json_name, holiday_path)
 
                 #cleaned and uploaded

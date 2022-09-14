@@ -3,15 +3,13 @@
         "https://www.haystravel.co.uk/sunset-beach-club",
         "https://www.haystravel.co.uk/grand-palladium-white-island-resort-and-spa",
         "https://www.haystravel.co.uk/inturotel-cala-azul-park",
-        "https://www.haystravel.co.uk/hotel-club-siroco",
-        "https://www.haystravel.co.uk/gf-fanabe",
-        "https://www.haystravel.co.uk/sol-pelicanos-ocas",
+        "https://www.haystravel.co.uk/hotel-pocillos-playa",
+        "https://www.haystravel.co.uk/don-pancho",
         "https://www.haystravel.co.uk/sunset-beach-club",
         "https://www.haystravel.co.uk/grand-palladium-white-island-resort-and-spa",
         "https://www.haystravel.co.uk/inturotel-cala-azul-park",
-        "https://www.haystravel.co.uk/hotel-club-siroco",
-        "https://www.haystravel.co.uk/gf-fanabe",
-        "https://www.haystravel.co.uk/sol-pelicanos-ocas",
+        "https://www.haystravel.co.uk/hotel-pocillos-playa",
+        "https://www.haystravel.co.uk/don-pancho",
         "https://www.haystravel.co.uk/sunset-beach-club",
         "https://www.haystravel.co.uk/grand-palladium-white-island-resort-and-spa"
     ],
@@ -87,15 +85,15 @@
     ],
     "Malta": [
         "https://www.haystravel.co.uk/pergola-hotel-and-spa-malta",
-        "https://www.haystravel.co.uk/cornucopia-hotel",
+        "https://www.haystravel.co.uk/dolmen-hotel-malta",
         "https://www.haystravel.co.uk/db-seabank-resort-and-spa",
         "https://www.haystravel.co.uk/qawra-palace-hotel",
         "https://www.haystravel.co.uk/pergola-hotel-and-spa-malta",
-        "https://www.haystravel.co.uk/cornucopia-hotel",
+        "https://www.haystravel.co.uk/dolmen-hotel-malta",
         "https://www.haystravel.co.uk/db-seabank-resort-and-spa",
         "https://www.haystravel.co.uk/qawra-palace-hotel",
         "https://www.haystravel.co.uk/pergola-hotel-and-spa-malta",
-        "https://www.haystravel.co.uk/cornucopia-hotel"
+        "https://www.haystravel.co.uk/dolmen-hotel-malta"
     ],
     "USA": [
         "https://www.haystravel.co.uk/dublin-and-new-york-twin-centre",
@@ -116,18 +114,22 @@
         "https://www.haystravel.co.uk/californias-gold-coast"
     ],
     "Caribbean": [
-        "https://www.haystravel.co.uk/hotel-riu-palace-tropical-bay-jamaica",
-        "https://www.haystravel.co.uk/sandals-grande-antigua",
-        "https://www.haystravel.co.uk/riu-tequila",
-        "https://www.haystravel.co.uk/time-out-hotel-barbados",
-        "https://www.haystravel.co.uk/hard-rock-hotel-and-casino-punta-cana",
-        "https://www.haystravel.co.uk/hotel-riu-palace-tropical-bay-jamaica",
-        "https://www.haystravel.co.uk/sandals-grande-antigua",
-        "https://www.haystravel.co.uk/riu-tequila",
-        "https://www.haystravel.co.uk/time-out-hotel-barbados",
-        "https://www.haystravel.co.uk/hard-rock-hotel-and-casino-punta-cana",
-        "https://www.haystravel.co.uk/hotel-riu-palace-tropical-bay-jamaica",
-        "https://www.haystravel.co.uk/sandals-grande-antigua"
+        "https://www.haystravel.co.uk/sandals-emerald-bay",
+        "https://www.haystravel.co.uk/beaches-turks-caicos",
+        "https://www.haystravel.co.uk/playa-vista-azul-tui",
+        "https://www.haystravel.co.uk/courtyard-aruba-resort-palm-beach-aruba-hotel",
+        "https://www.haystravel.co.uk/royalton-antigua",
+        "https://www.haystravel.co.uk/sandals-grenada-resort-and-spa",
+        "https://www.haystravel.co.uk/sandals-grande-st-lucian",
+        "https://www.haystravel.co.uk/sandals-emerald-bay",
+        "https://www.haystravel.co.uk/beaches-turks-caicos",
+        "https://www.haystravel.co.uk/playa-vista-azul-tui",
+        "https://www.haystravel.co.uk/courtyard-aruba-resort-palm-beach-aruba-hotel",
+        "https://www.haystravel.co.uk/royalton-antigua",
+        "https://www.haystravel.co.uk/sandals-grenada-resort-and-spa",
+        "https://www.haystravel.co.uk/sandals-grande-st-lucian",
+        "https://www.haystravel.co.uk/sandals-emerald-bay",
+        "https://www.haystravel.co.uk/beaches-turks-caicos"
     ],
     "Italy": [
         "https://www.haystravel.co.uk/carlton-on-the-grand-canal-venice",
@@ -142,16 +144,16 @@
         "https://www.haystravel.co.uk/navona-palace-luxury-inn-rome"
     ],
     "Croatia": [
-        "https://www.haystravel.co.uk/hotel-lapad-dubrovnik",
-        "https://www.haystravel.co.uk/hotel-cavtat",
-        "https://www.haystravel.co.uk/hotel-croatia",
         "https://www.haystravel.co.uk/boutique-hotel-more-dubrovnik",
         "https://www.haystravel.co.uk/hotel-lapad-dubrovnik",
-        "https://www.haystravel.co.uk/hotel-cavtat",
         "https://www.haystravel.co.uk/hotel-croatia",
+        "https://www.haystravel.co.uk/royal-blue-hotel-dubrovnik",
         "https://www.haystravel.co.uk/boutique-hotel-more-dubrovnik",
         "https://www.haystravel.co.uk/hotel-lapad-dubrovnik",
-        "https://www.haystravel.co.uk/hotel-cavtat"
+        "https://www.haystravel.co.uk/hotel-croatia",
+        "https://www.haystravel.co.uk/royal-blue-hotel-dubrovnik",
+        "https://www.haystravel.co.uk/boutique-hotel-more-dubrovnik",
+        "https://www.haystravel.co.uk/hotel-lapad-dubrovnik"
     ],
     "Dubai & Middle East": [
         "https://www.haystravel.co.uk/dubai-and-bali",
@@ -192,16 +194,16 @@
         "https://www.haystravel.co.uk/lapland-hotel-saaga-yllasjarvi"
     ],
     "Iceland": [
-        "https://www.haystravel.co.uk/fosshotel-baron-reykjavik",
-        "https://www.haystravel.co.uk/fosshotel-lind",
-        "https://www.haystravel.co.uk/center-hotel-laugavegur-reykjavik",
         "https://www.haystravel.co.uk/fosshotel-raudara-reykjavik",
         "https://www.haystravel.co.uk/fosshotel-baron-reykjavik",
         "https://www.haystravel.co.uk/fosshotel-lind",
         "https://www.haystravel.co.uk/center-hotel-laugavegur-reykjavik",
         "https://www.haystravel.co.uk/fosshotel-raudara-reykjavik",
         "https://www.haystravel.co.uk/fosshotel-baron-reykjavik",
-        "https://www.haystravel.co.uk/fosshotel-lind"
+        "https://www.haystravel.co.uk/fosshotel-lind",
+        "https://www.haystravel.co.uk/center-hotel-laugavegur-reykjavik",
+        "https://www.haystravel.co.uk/fosshotel-raudara-reykjavik",
+        "https://www.haystravel.co.uk/fosshotel-baron-reykjavik"
     ],
     "Egypt": [
         "https://www.haystravel.co.uk/stella-gardens-resort-and-spa-makadi-bay-hurghada",
