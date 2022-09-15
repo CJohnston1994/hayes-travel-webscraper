@@ -11,16 +11,23 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.chrome.service import Service
-import os, json, uuid, time, random, aws, config
+import os, json, uuid, time, random, aws, config, dataclasses, attrs
 
+class EnhancedJSONEncoder(json.JSONEncoder):
+        def default(self, o):
+            if dataclasses.is_dataclass(o):
+                return dataclasses.asdict(o)
+            return super().default(o)
 
 class Scraper:
     def __init__(self, url: str, autoscrape:bool = True ):
+        user_agent = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36"
         self.URL = url
         options = Options()
         options.add_argument("--headless")
         options.add_argument('--no-sandbox')
         options.add_argument('--disable-dev-shm-usage')
+        options.add_argument(f'user-agent={user_agent}')
         self.driver = Chrome(service=Service(ChromeDriverManager().install()), options = options)
         self.driver.get(self.URL)
         self.wait = WebDriverWait(self.driver, 10)
@@ -31,7 +38,7 @@ class Scraper:
         if autoscrape:
             self.run_scraper()
 
-    @dataclass
+    @attrs.frozen
     class _Holiday():
         url: str = None
         uuid: str = None
@@ -52,6 +59,12 @@ class Scraper:
                 return self.detail
             except Exception as e:
                 print(f"Detail not found: {detail}")
+
+        def return_dict(self):
+            return_dict = {}
+            for attribute in self.attributes:
+                return_dict.push(attribute)
+
 
     def _accept_cookies(self, xpath) -> bool:
         '''
@@ -210,13 +223,14 @@ class Scraper:
                 self.__get_holiday_details(current_holiday, country)
                 print(3)
                 print(current_holiday)
-                holiday_path = os.path.join("raw_data", f'{getattr(current_holiday, "uuid")}')
+                current_uuid = current_holiday.uuid
+                holiday_path = os.path.join("raw_data", f'{current_uuid}')
                 if not exists(holiday_path):
                     os.mkdir(holiday_path)
                 image_path = os.path.join(holiday_path, "images")
                 if not exists(image_path):
                     os.mkdir(image_path)
-                scraped_holiday = json.dump(dict(current_holiday), holiday_path)
+                scraped_holiday = json.dump(current_holiday, holiday_path, cls=EnhancedJSONEncoder)
                 self._save_to_json(scraped_holiday, holiday_json_name, holiday_path)
 
                 #cleaned and uploaded
@@ -371,7 +385,10 @@ class Scraper:
         '''
         self._accept_cookies('onetrust-accept-btn-handler')
         #try:
-        country_dict = self._dict_countries()
+        test = self._Holiday()
+        test2 = json.dump(test, '/', default = attrs.asdict)
+        print(test2)
+        '''country_dict = self._dict_countries()
         url_dict = self._get_holidays_from_country(country_dict)
         self.__scrape_per_country(url_dict)
-        print("Scrape Complete")
+        print("Scrape Complete")'''
