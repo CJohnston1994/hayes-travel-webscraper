@@ -5,5 +5,5 @@ services:
         image: python:3.10.4
         container_name: hayes_travel_scraper
         environment:
-        - HOST="hayes-travel-scraper.c3deqrfbkahl.us-east-1.rds.amazonaws.com"
-        - PASSWORD="Nicole2005!"
+        - HOST=${HOST}
+        - PASSWORD=${PASSWORD}
