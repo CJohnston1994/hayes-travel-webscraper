@@ -1,7 +1,10 @@
+import os, json, uuid, time, random, aws, config, shutil, re
 from dataclasses import dataclass
 from genericpath import exists
+from math import nan
 from re import sub
 from urllib.request import urlretrieve
+from datetime import datetime
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver import Chrome
@@ -9,17 +12,28 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.chrome.service import Service
-import os, json, uuid, time, random, aws
+from typing import ClassVar
+
+class holidayEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, Scraper._Holiday):
+            return obj.__dict__
+        # Base class default() raises TypeError:
+        return json.JSONEncoder.default(self, obj)
 
 class Scraper:
-    def __init__(self, url:str, autoscrape:bool = True):
+    def __init__(self, url: str, autoscrape:bool = True ):
+        user_agent = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36"
         self.URL = url
         options = Options()
         options.add_argument("--headless")
+        options.add_argument('--no-sandbox')
+        options.add_argument('--disable-dev-shm-usage')
+        options.add_argument(f'user-agent={user_agent}')
         self.driver = Chrome(service=Service(ChromeDriverManager().install()), options = options)
         self.driver.get(self.URL)
         self.wait = WebDriverWait(self.driver, 10)
-        self.data_handler = aws.DataHandler('raw_data')
+        self.data_handler = aws.DataHandler()
             
         if not exists("raw_data"):
             os.mkdir("raw_data")
@@ -28,29 +42,21 @@ class Scraper:
 
     @dataclass
     class _Holiday():
-        details = {
-        "url": str,
-        "uuid": str,
-        "human_id": str,
-        "hotel": str,
-        "area": str,
-        "country": str,
-        "price": int,
-        "adults/children": list,
-        "nights": int,
-        "catering": str,
-        "next_date": str,
-        "rating": float,
-        "images": list,
-        }
+        url: ClassVar[str] = None
+        uuid: ClassVar[str] = None
+        human_id: ClassVar[str] = None
+        hotel: ClassVar[str] = None
+        area: ClassVar[str] = None
+        country: ClassVar[str] = None
+        price: ClassVar[int] = None
+        group_size: ClassVar[list] = None
+        nights: ClassVar[int] = None
+        catering: ClassVar[str] = None
+        next_date: ClassVar[str] = None
+        rating: ClassVar[float] = None
+        images: ClassVar[list] = None
 
-        def get_detail(self, detail:str):
-            try:
-                return self.details[detail]
-            except Exception:
-                print(f"Detail not foind: {detail}")
-
-    def _accept_cookies(self, xpath):
+    def _accept_cookies(self, xpath) -> bool:
         '''
         Finds the Accept Cookies Button, waits for it to be clickable and then clicks it
         '''
@@ -63,12 +69,16 @@ class Scraper:
         except Exception:
             return False
 
-    def __remove_dict_keys_from_list(self, dict:dict, list:list):
+    def __remove_dict_keys_from_list(
+        self, 
+        dict:dict, 
+        list:list
+        ) -> dict:
         '''
         remove all dict entries form a list passed in, this list should be empty keys
         '''
-        for i in list:
-            dict.pop(i,None)
+        for link in list:
+            dict.pop(link,None)
         return dict
 
     def _dict_countries(self):
@@ -81,28 +91,28 @@ class Scraper:
             dest_link = elem.get_attribute('href')
             country_name = elem.get_attribute('title')
             countries[country_name] = dest_link
-        #logging.debug('countries finished')
-        self._save_to_json(countries, 'country_urls.json', 'json_data/')
+        if not exists("json_data"):
+            os.mkdir("json_data")
+        with open("json_data/country_urls.json","w") as outfile:
+            json.dump(countries, outfile, indent=4)
         return countries
     
-    def _get_holidays_from_country(self, dict_of_countries:dict):
+    def _get_holidays_from_country(self, dict_of_countries:dict) -> dict:
         '''
         Takes the country url dict and gets all the holidays hrefs from the urls for the countries
         '''
         #initialize/clear the list of countries without holidays
         countries_without_holidays = []
         #xpaths for the current project. Can be changed per site
-        holiday_xpath = '//a[@class = "more color-white bg-yellow font-gotham"]'
-        city_xpath = '//a[@class = "item shadow"]'
+        holiday_xpath = config.HOLIDAY_XPATH
+        city_xpath = config.CITY_XPATH
 
-        holiday_list = list(dict_of_countries.values())
         #loop throught the countries gathered from the site
-        for holiday in holiday_list:
+
+        for country, dest_link in dict_of_countries.items():
             list_of_holidays = []
             try:
-                #set the link of the holiday
-                dest_link = dict_of_countries[holiday]
-                #find the href attributess
+                #find the href attributes
                 list_of_holidays = self._find_href(dest_link, holiday_xpath)
                 #if there are no holidays available try looking for cities (site layout inconsistant)
                 if len(list_of_holidays)<1:
@@ -110,19 +120,24 @@ class Scraper:
                     #if cities are found find holidays within
                     for city in list_of_cities:
                         list_of_holidays = self._find_href(city, holiday_xpath)
-                #if there are still no entries, set the 
+                #if there are still no entries, set the country to be removed from the dict
                 if len(list_of_holidays) < 1:
-                    countries_without_holidays.append(holiday)
+                    countries_without_holidays.append(country)
                 #assign the list to the current country in the dict
-                holiday_list[holiday] = list_of_holidays
+                dict_of_countries[country] = list_of_holidays
             except TypeError:
-                return holiday_list
+                return dict_of_countries
         #remove keys with no values
-        holiday_list =  self.__remove_dict_keys_from_list(holiday_list, countries_without_holidays)
-        self._save_to_json(holiday_list, "holiday_url_dict.json", "json_data/")
-        return holiday_list
+        dict_of_countries =  self.__remove_dict_keys_from_list(dict_of_countries, countries_without_holidays)
+        with open("json_data/holiday_url_dict.json", "w") as outfile:
+            json.dump(dict_of_countries, outfile, indent=4)
+        return dict_of_countries
 
-    def _find_href(self, url:str, xpath:str):
+    def _find_href(
+                self, 
+                url: str,
+                xpath: str
+                ) -> list:
         '''
         finds hrefs on a given url using the xpath and returns a list of the hrefs 
         '''
@@ -134,46 +149,7 @@ class Scraper:
             href_list.append(dest_link)
         return href_list
 
-    def _save_to_json(self, data, file_name:str, folder_path:str, ):
-        '''
-        save a file as a json, with a specific path
-        '''
-        # get the working directory and append the file name arguemnts
-        starting_directory = os.getcwd()
-        dir_path = os.path.join(starting_directory,folder_path)
-        #create directory if it doesnt exist
-        if not os.path.exists(dir_path): #and not os.path.isdir(dir_path):
-            os.mkdir(dir_path)
-        #attempt to write the data param to a json file
-        try:
-            os.chdir(dir_path)
-            #check that the data is list or dict to dump
-            if isinstance(data, (dict, list)):
-                with open(file_name, 'w') as outfile:
-                    #json_object = json.loads(data)                    
-                    json.dump(data, outfile, indent = 4 )
-            else:
-                with open(file_name, 'w') as outfile:
-                    json.write(data)
-                #cd to the starting directory
-            os.chdir(starting_directory)
-        except Exception:
-            print(f'Failed to save: {file_name} as JSON')
-        
-    def _load_from_json(self, file_name:str, expected:type):
-        '''
-        load data from json for testing scrape
-        '''
-        with open(file_name) as json_file:
-            data = json.load(json_file)
-        try:
-            if type(data) == expected:
-                return data
-            else:
-                raise TypeError
-        except TypeError:
-               print("Data retrieval of file: ", file_name, " failed, incorrect type: ", type(data))
-          
+
     def __scrape_per_country(self, dict_of_countries:dict):
         '''
         navigate to the holiday url and create the holiday data object
@@ -184,127 +160,120 @@ class Scraper:
         nested for loop is used to set country as it was not reliably scrapable from
         the holiday url itslef
         '''
-        scraped_images = aws._images_already_scraped()
-
-        #prep for saving
-        holiday_json_name = 'data.json'
-        for country in dict_of_countries:
-            for url in dict_of_countries[country]:
+        total_list = []
+        countries = dict_of_countries.keys()
+        for country in countries:
+            for holiday in dict_of_countries[country]:
                 # scrapes details
-                self.driver.get(dict_of_countries[country][url])
+                self.driver.get(holiday)
                 current_holiday = self._Holiday()
-                current_holiday["country"] = country
-                scraped_holiday = self._get_holiday_details(current_holiday, country)
-
-                holiday_path = os.path.join("raw_data", f'{current_holiday.get_detail("uuid")}')
-                os.mkdir(holiday_path)
+                self.__get_holiday_details(current_holiday, country)
+                holiday_path = os.path.join("raw_data", f'{current_holiday.uuid}')
+                if not exists(holiday_path):
+                    os.mkdir(holiday_path)
                 image_path = os.path.join(holiday_path, "images")
-                os.mkdir(image_path)
-                self._save_to_json(scraped_holiday.details, holiday_json_name, holiday_path)
+                if not exists(image_path):
+                    os.mkdir(image_path)
+                with open(os.path.join(holiday_path,"data.json"), "w") as outfile:
+                    json.dump(current_holiday.__dict__, outfile, indent=4, default=str)
+      
+                total_list.append(current_holiday.__dict__)
 
-                #cleaned and uploaded
-                json_data = json.dump(scraped_holiday.details, indent = 4)
-                cleaner = aws.DataHandler(json_data)
-                json_cleaned = aws.clean(json_data)
-                if aws.check_database_for_duplicate(json_cleaned):
-                    aws.send_to_rds(json_cleaned)
-                
-                if current_holiday['images'] not in scraped_holiday:
-                    self.__scrape_3_images(current_holiday,image_path, scraped_images)
+            print(f"{country} scrape completed!")
+        #self.data_handler.process_data(total_list)
+        return total_list
+        
     
-    def __scrape_3_images(self, Holiday:object, folder_path, scraped_images:list):
+    def __scrape_images(self, dataframe_list):
         '''
+        gathers image urls form the scraped list of images
+        scrape every im
         Scrape 3 images for each holiday into an image folder within the uuid folder created in scrape_per_country
         '''
-        images:list = Holiday.get_detail('images')
-        for i in range(3):
-            if images[i] in scraped_images[:]:
-                image_link = images[i]
-                image_name = f"{Holiday.get_detail('uuid')}_{str(i)}.jpg"
-                path = os.path.join(folder_path ,image_name)
-                urlretrieve(image_link, path)
+        for _dict in dataframe_list:
+            address_path = os.path.join("raw_data", _dict["uuid"], "images")
+            for element in range(3):
+                image_link = _dict["images"][element]
+                
+                save_name = os.path.join(address_path, re.sub(r'^.+/([^/]+)$', r'\1', image_link))
+                urlretrieve(image_link, save_name)
                 time.sleep(random.randint(0,3))
-            else:
-                continue
+
         
-    def __get_holiday_details(self, holiday:object, country: str):
+    def __get_holiday_details(
+        self,
+        holiday: object, 
+        country: str
+        ):
+
         '''
         This method collects details from each holiday url
 
-        '''
-        #all non details containers (including locations)
-        location_container = '//div[@class="hotel-info bg-white shadow"]'
-        country_base = '//a[@class="btn bg-yellow color-white"]'
-        url = self.driver.current_url
-        holiday_id = str(uuid.uuid4())
-        deterministic_id = url.replace("https://www.haystravel.co.uk/","")
-        hotel = self._find_holiday_detail(location_container, '/h1')
-        resort = self._find_holiday_detail(location_container, '/div[2]')
-        holiday_country = self._find_holiday_detail(country_base, '//*[@id="destination-one-content"]/div[3]/div/a')
+        Create congig and create 
 
-        #detail container fields
-        details_container = '//div[@class="text"]'
-        holiday_price = self._find_holiday_detail("", '//div[@class="price color-blue"]')
-        group_size = self._find_holiday_detail(details_container, '/div[1]//p')
-        duration = self._find_holiday_detail(details_container, '/div[2]//p')
-        catering_type = self._find_holiday_detail(details_container, '/div[3]//p')
-        soonest_departure = self._find_holiday_detail(details_container, '/div[5]//p[1]')
-        soonest_date = self._convert_str_to_datetime(soonest_departure)
-        star_rating = float(self.driver.find_element(By.XPATH, '//span[@class = "rating-label"]').text.rstrip("/5"))
-        images = []
+        '''
+        page_url = self.driver.current_url
+        deterministic_id = page_url.replace("https://www.haystravel.co.uk/","")
+        try:
+            area = self._find_holiday_detail(config.LOCATION_CONTAINER_XPATH, '/div[2]')
+            hotel = self._find_holiday_detail(config.LOCATION_CONTAINER_XPATH, '/h1')
+        except Exception:
+            area = None
+            hotel = deterministic_id.replace("-", " ")
+
+        self._find_holiday_detail(config.DETAILS_CONTAINER_XPATH, '/div[1]//p')
+        group_size = self._find_holiday_detail(config.DETAILS_CONTAINER_XPATH, '/div[1]//p')
+        duration = self._find_holiday_detail(config.DETAILS_CONTAINER_XPATH, '/div[2]//p')
+        soonest_departure = self._find_holiday_detail(config.DETAILS_CONTAINER_XPATH, '/div[5]//p[1]')
+        images = set()
         images_element = self.driver.find_elements(By.XPATH, '//div[@class = "carousel-item"]/img')
         for image in images_element:
             src = image.get_attribute('src')
-            images.append(src)
+            images.add(src)
 
-        holiday.details = {
-            "url": url,
-            "uuid": holiday_id,
-            "human_id": deterministic_id,
-            "hotel": hotel.capitalize(),
-            "area": resort,
-            "country": holiday_country,
-            "price": self._remove_chars_convert_to_int(holiday_price),
-            "adults/children": self._remove_chars_convert_to_int(self._check_family_holiday(group_size)),
-            "duration": self._remove_chars_convert_to_int(duration),
-            "catering": catering_type,
-            "next_date": soonest_date,
-            "rating": star_rating,
-            "images": images}
-        return holiday
+        #setting attributes for elements that need more processing, or that can't be scraped
+        setattr(holiday, "url", self.driver.current_url)
+        setattr(holiday, "uuid", str(uuid.uuid4()))
+        setattr(holiday, "country", country)
+        setattr(holiday, "hotel", hotel)
+        setattr(holiday, "area", area)
+        setattr(holiday, "human_id", deterministic_id)
+        setattr(holiday, "price", self._remove_chars_convert_to_int(self._find_holiday_detail("", '//div[@class="price color-blue"]')))
+        setattr(holiday, "group_size", self._check_family_holiday(group_size))
+        setattr(holiday, "nights", self._remove_chars_convert_to_int(duration))
+        setattr(holiday, "next_date", self._convert_str_to_datetime(soonest_departure))
+        setattr(holiday, "images", list(images))
 
-    def _convert_str_to_datetime(self, date_string:str):
+        #loop through the dict values in the config file and set attributes for each key
+        for key, value in list(config.XPATH_DETAILS_DICTIONARY.items()):
+            setattr(holiday, key, self._find_holiday_detail(value[0], value[1]))
+       
+     
+    def _convert_str_to_datetime(self, date_string: str) -> str:
         '''
-        convert string read form XPATH to a datetime format
+        convert string returned from _clean_date_string to datetime format
+        using a using  the clean_date_string method
         '''
-        month = {"January": "01",
-                 "February": "02",
-                 "March": "03",
-                 "April": "04",
-                 "May": "05",
-                 "June": "06",
-                 "July": "07",
-                 "August": "08",
-                 "September": "09",
-                 "October": "10",
-                 "November": "11",
-                 "December": "12"
-                }
         try:
-            #split string to isolate day, e.g 1st, 22nd, 31st
-            new_date = date_string.split(" ")
-            #remove characters from the day use dict to change month to number
-            #remove date subscripts
-            new_date[0] = sub(r'[^\d.]', '', new_date[0]).zfill(2)
-            # converts month word
-            new_date[1] = month[new_date[1].capitalize()]
-            new_date.reverse()
-            #convert the month to numberdate
-            new_date = "-".join(new_date)            
-            return new_date
+            return self._clean_date_string(date_string)
         except KeyError as e:
-            print(f"Date String Failed at {self.driver.current_url()}")
-            raise KeyError from e
+            return None
+
+    def _clean_date_string(self, date_string):
+        '''
+        remove characters from the day use dict to change month to number
+        converts month word
+        convert the month to numberdate
+        remove date subscripts
+        '''        
+        new_date = date_string.split(" ")
+        new_date[0] = new_date[0].rstrip("stndrh")
+        new_date = " ".join(new_date)
+        try:        
+            return datetime.strptime(new_date, '%d %B %Y').date()
+        except Exception as e:
+            return None
+            
 
     def _remove_chars_convert_to_int(self, input):
         '''
@@ -318,39 +287,44 @@ class Scraper:
             for i in range(len(input)):
                 new_int = sub(r'[^\d.]', '', input[i])
                 new_int_list.append(new_int)
-            return list(map(int, new_int_list))
+                return list(map(int, new_int_list))
         else:
             new_int = int(sub(r'[^\d.]', '', input))
             return new_int
             
-    def _check_family_holiday(self, no_people:str):
+    def _check_family_holiday(self, no_people: str):
         '''
         if there are Adults and children in a holiday deal split this into a list of 2 entries
         to be converted into ints
         '''
-        return no_people.split(' + ')
+        no_people = self._remove_chars_convert_to_int(no_people)
+        return sum(no_people) if type(no_people) == list else no_people
         
-    def _find_holiday_detail(self, container:str, element_xpath:str):
+    def _find_holiday_detail(self, container: str, element_xpath: str):
         '''
-        Find details by relative xpath given xpath
+        Find details by relative xpath given a container and element
+        in the url given by self.driver.geturl(), generalising the process
+        of getting href attributes.
         '''
         try:
             path = container + element_xpath
-            element = self.driver.find_element(By.XPATH, path)
+            if not (element:= self.driver.find_element(By.XPATH, path)):
+                raise TypeError
             return element.get_attribute("innerText")
-        except Exception:
-            print("element not found")
+        except Exception as e:
+            print(f"element not found\n Error: {e}\n")
     
     def run_scraper(self):
         '''
         Main Scraping of the program
         '''
         self._accept_cookies('onetrust-accept-btn-handler')
-        try:
-            country_dict = self._dict_countries()
-            url_dict = self._get_holidays_from_country(country_dict)
-            self.__scrape_per_country(url_dict)
+        #try:
 
-        finally:
-            print("Scrape Complete")
-            self.driver.quit()
+        country_dict = self._dict_countries()
+        url_dict = self._get_holidays_from_country(country_dict)
+        dataframe_list = self.__scrape_per_country(url_dict)
+        #self.__scrape_images(dataframe_list)
+        print("Scrape Complete\n\n")
+        self.data_handler.remove_expired()
+        shutil.rmtree('raw_data')

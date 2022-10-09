@@ -8,9 +8,10 @@ from selenium.common.exceptions import WebDriverException
 class WebscraperTestCase(unittest.TestCase):
     def setUp(self) -> None:
         self.test_scraper = Scraper("https://www.haystravel.co.uk/holiday-destinations", False)
+        base_dir = '/home/clark/Desktop/AICORE/Code/2.WebScraper/'
         self.country_url_dict = self.test_scraper._load_from_json('/home/clark/Desktop/AICORE/Code/2.WebScraper/json_data/country_urls.json', dict)
         self.holiday_url_dict = self.test_scraper._load_from_json('/home/clark/Desktop/AICORE/Code/2.WebScraper/json_data/holiday_url_dict.json', dict)
-        os.chdir('/home/clark/Desktop/AICORE/Code/2.WebScraper/')
+        os.chdir(base_dir)
         self.working_dir = os.getcwd()
         #self.small_country_dict = self.test_scraper.load_from_json("tests/test_holiday_url_dict.json", dict)
 
@@ -47,20 +48,19 @@ class WebscraperTestCase(unittest.TestCase):
 
     @unittest.skip
     def test_save_to_json(self):
-        test_dir_prefix = self.working_dir + "/tests/"
+        test_dir_prefix = f"{self.working_dir}/tests/"
         temp_dir = tempfile.mkdtemp(prefix=test_dir_prefix)
         test_file_name = "save_json_test.json"
-
         def file_exists(directory, filename):
             try:
-                #os.chdir(directory)
                 self.test_scraper._save_to_json(self.holiday_url_dict, test_file_name, directory)
+
                 contents = os.listdir(directory)
                 print(contents)
                 print(os.getcwd())
                 shutil.rmtree(directory)
                 return contents
-            except:
+            except Exception:
                 return False
             finally:
                 os.chdir(self.working_dir)
