@@ -3,13 +3,10 @@ import config as c
 import pandas as pd
 from sqlalchemy import create_engine
 
-
-base = declarative_base()
-
 class DataHandler():
     def __init__(self):
         #aws resources        
-        s3_session = boto3.Session(aws_access_key_id=c.S3_ACCESS,aws_secret_access_key =c.S3_SECRET)
+        s3_session = boto3.Session(aws_access_key_id=c.S3_ACCESS_KEY,aws_secret_access_key =c.S3_SECRET_KEY)
         self.s3_client = s3_session.client('s3')
         self.s3_resource = s3_session.resource('s3')
         self.my_bucket = self.s3_resource.Bucket('hayes-travel-web-scraper')
@@ -17,11 +14,12 @@ class DataHandler():
         self.engine = create_engine(f"{c.DATABASE_TYPE}+{c.DBAPI}://{c.USER}:{c.PASSWORD}@{c.HOST}:{c.PORT}/{c.DATABASE}")
 
 
-    def _upload_data(self, raw_data):
+    def _upload_data(self, df: pd.DataFrame):
         '''
         Upload all data and check for duplicate entries
         '''
-        for row in raw_data:
+        df = pd.DataFrame(df)
+        for index, row in df.iterrows():
             file_name = os.path.join("raw_data", row["uuid"], 'data.json')
             self.s3_client.upload_file(file_name, 'hayes-travel-web-scraper', file_name)   
         
@@ -36,7 +34,7 @@ class DataHandler():
         
         pd.to_datetime(df.loc[0, 'next_date'])
 
-        return data
+        return df
 
     def __upload_images(self, raw_data):
         os.chdir('images')
@@ -62,7 +60,7 @@ class DataHandler():
         with psycopg2.connect(host=c.HOST, user=c.USER, password=c.PASSWORD, dbname=c.DATABASE, port=c.PORT) as conn:
             with conn.cursor() as curs:
                 curs.execute(''' SELECT * FROM hayes_holiday ''')
-            db_df = pd.DataFrame(conn.fetchall())
+                db_df = pd.DataFrame(curs.fetchall())
         dupe_subset = ['url', 'human_id', 'hotel', 'area', 'country', 'price', 'group_size', 'nights', 'catering', 'next_date']
         df.drop_duplicates(subset = dupe_subset)
 
@@ -100,4 +98,13 @@ class DataHandler():
                                 WHERE hayes_holiday.next_date < '{today}';                      
                 ''')
 
-    #def remove_duplicates(self):
+    def remove_duplicates(self):
+        with psycopg2.connect(host=c.HOST, user=c.USER, password=c.PASSWORD, dbname=c.DATABASE, port=c.PORT) as conn:
+            with conn.cursor() as curs:
+                curs.execute('''
+                CREATE TABLE distinct_store AS(
+                SELECT DISTINCT on (url) test_table.* FROM test_table);
+                DROP TABLE test_table;
+                ALTER TABLE distinct_store
+                    RENAME TO test_table;
+                ''')

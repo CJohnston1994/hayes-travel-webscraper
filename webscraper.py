@@ -324,7 +324,7 @@ class Scraper:
         url_dict = self._get_holidays_from_country(country_dict)
         dataframe_list = self.__scrape_per_country(url_dict)
         self.data_handler.process_data(dataframe_list)
-        self.__scrape_images(dataframe_list)
+        #self.__scrape_images(dataframe_list)
         print("Scrape Complete\n\n")
         self.data_handler.remove_expired()
         shutil.rmtree('raw_data')
