@@ -35,18 +35,6 @@ class DataHandler():
         df = pd.DataFrame.from_dict(data)
         
         pd.to_datetime(df.loc[0, 'next_date'])
-        df.drop_duplicates(subset =
-            ['url',
-            'human_id',
-            'hotel',
-            'area',
-            'country',  
-            'price',
-            'group_size',
-            'nights',
-            'catering',
-            'next_date']
-            )
 
         return data
 
@@ -70,10 +58,24 @@ class DataHandler():
                 scraped_images.append(scraped_url)
         return scraped_images
 
+    def drop_duplicates(self, df:  pd.DataFrame) -> pd.DataFrame:
+        with psycopg2.connect(host=c.HOST, user=c.USER, password=c.PASSWORD, dbname=c.DATABASE, port=c.PORT) as conn:
+            with conn.cursor() as curs:
+                curs.execute(''' SELECT * FROM hayes_holiday ''')
+            db_df = pd.DataFrame(conn.fetchall())
+        dupe_subset = ['url', 'human_id', 'hotel', 'area', 'country', 'price', 'group_size', 'nights', 'catering', 'next_date']
+        df.drop_duplicates(subset = dupe_subset)
+
+        total_df = pd.concat([df,db_df])
+        total_df.drop_duplicates(subset = dupe_subset)
+
+        return total_df
+
     def process_data(self, raw_data):
         df = self.__clean_and_normalize(raw_data)
-        self._upload_data(df)
-        self.__send_data_to_rds(df)
+        dupe_free = self.drop_duplicates(df)
+        self._upload_data(dupe_free)
+        self.__send_data_to_rds(dupe_free)
         
 
     def process_images(self, path):
@@ -87,18 +89,15 @@ class DataHandler():
         with psycopg2.connect(host=c.HOST, user=c.USER, password=c.PASSWORD, dbname=c.DATABASE, port=c.PORT) as conn:
             with conn.cursor() as curs:
                 curs.execute(f'''
-                            IF NOT EXISTS(SELECT *
-                                          FROM INFORMATION_SCHEMA.TABLES
-                                          WHERE TABLE_SCHEMA = 'public'
-                                          AND TABLE_NAME = 'ExpiredHolidays);
-                            CREATE TABLE ExpiredHolidays AS
-                            SELECT * FROM hayes_holiday
-                            WHERE nextdate < '{today}';
-                            ELSE INSERT INTO ExpiredHolidays
-                            VALUES (SELECT * FROM hayes_holiday
-                                    WHERE nextdate < '{today}');
+                            CREATE TABLE IF NOT EXISTS expired_holidays AS
+                                (SELECT * FROM hayes_holiday
+                                WHERE next_date < '{today}');
+                            INSERT INTO expired_holidays
+                                SELECT * FROM hayes_holiday
+                                WHERE uuid NOT IN (SELECT uuid FROM expired_holidays)
+                                AND hayes_holiday.next_date < '{today}';
                             DELETE FROM hayes_holiday
-                            WHERE nextdate < '{today}'                      
+                                WHERE hayes_holiday.next_date < '{today}';                      
                 ''')
 
     #def remove_duplicates(self):
