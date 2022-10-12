@@ -1,22 +1,22 @@
 import os
+with open('env-file.env') as env:
+    '''
+    AWS s3_client details
+    '''
+    S3_ACCESS = os.environ.get(env.S3_ACCESS_KEY)
+    S3_SECRET = os.environ.get(env.S3_SECRET_KEY)
+    S3_BUCKET = os.environ.get(env.BUCKET_NAME)
 
-'''
-AWS s3_client details
-'''
-S3_ACCESS = os.environ.get('S3_ACCESS_KEY')
-S3_SECRET = os.environ.get('S3_SECRET_KEY')
-S3_BUCKET = os.environ.get('BUCKET_NAME')
-
-'''
-SQLalchemy database engine details
-'''
-HOST = os.environ['HOST']
-PASSWORD = os.environ["PASSWORD"]
-DATABASE_TYPE = 'postgresql'
-DBAPI = 'psycopg2'
-USER = os.environ.get('DB_USER')
-DATABASE = os.environ.get('DATABASE_NAME')
-PORT = os.environ.get('PORT')
+    '''
+    SQLalchemy database engine details
+    '''
+    HOST = os.environ.get(env.HOST)
+    PASSWORD = os.environ.get(env.PASSWORD)
+    DATABASE_TYPE = 'postgresql'
+    DBAPI = 'psycopg2'
+    USER = os.environ.get(env.DB_USER)
+    DATABASE = os.environ.get(env.DATABASE_NAME)
+    PORT = os.environ.get(env.PORT)
 
 '''
 XPATH CONSTANTS
