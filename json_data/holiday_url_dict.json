@@ -62,20 +62,16 @@
         "https://www.haystravel.co.uk/liberty-fabay-turkey"
     ],
     "Greece": [
-        "https://www.haystravel.co.uk/golden-sun-hotel-kalamaki",
-        "https://www.haystravel.co.uk/astra-village-hotel-and-spa",
-        "https://www.haystravel.co.uk/tui-blue-atlantica-grand-med",
-        "https://www.haystravel.co.uk/belair-beach-hotel-rhodes",
-        "https://www.haystravel.co.uk/sandys-paradise-resort-perissa",
-        "https://www.haystravel.co.uk/imperial-belvedere-hersonissos",
-        "https://www.haystravel.co.uk/golden-sun-hotel-kalamaki",
-        "https://www.haystravel.co.uk/astra-village-hotel-and-spa",
-        "https://www.haystravel.co.uk/tui-blue-atlantica-grand-med",
-        "https://www.haystravel.co.uk/belair-beach-hotel-rhodes",
-        "https://www.haystravel.co.uk/sandys-paradise-resort-perissa",
-        "https://www.haystravel.co.uk/imperial-belvedere-hersonissos",
-        "https://www.haystravel.co.uk/golden-sun-hotel-kalamaki",
-        "https://www.haystravel.co.uk/astra-village-hotel-and-spa"
+        "https://www.haystravel.co.uk/happy-days-malia-crete",
+        "https://www.haystravel.co.uk/dannys-hotel-zante",
+        "https://www.haystravel.co.uk/avra-beach-ixia-rhodes",
+        "https://www.haystravel.co.uk/santorini-palace-hotel-firostefani",
+        "https://www.haystravel.co.uk/happy-days-malia-crete",
+        "https://www.haystravel.co.uk/dannys-hotel-zante",
+        "https://www.haystravel.co.uk/avra-beach-ixia-rhodes",
+        "https://www.haystravel.co.uk/santorini-palace-hotel-firostefani",
+        "https://www.haystravel.co.uk/happy-days-malia-crete",
+        "https://www.haystravel.co.uk/dannys-hotel-zante"
     ],
     "Cyprus": [
         "https://www.haystravel.co.uk/olympic-lagoon-resort",
@@ -120,34 +116,24 @@
         "https://www.haystravel.co.uk/los-angeles-to-las-vegas-road-trip"
     ],
     "Caribbean": [
+        "https://www.haystravel.co.uk/sandals-grande-st-lucian",
         "https://www.haystravel.co.uk/sandals-emerald-bay",
-        "https://www.haystravel.co.uk/beaches-turks-caicos",
         "https://www.haystravel.co.uk/playa-vista-azul-tui",
         "https://www.haystravel.co.uk/courtyard-aruba-resort-palm-beach-aruba-hotel",
         "https://www.haystravel.co.uk/royalton-antigua",
         "https://www.haystravel.co.uk/sandals-grenada-resort-and-spa",
         "https://www.haystravel.co.uk/sandals-grande-st-lucian",
         "https://www.haystravel.co.uk/sandals-emerald-bay",
-        "https://www.haystravel.co.uk/beaches-turks-caicos",
         "https://www.haystravel.co.uk/playa-vista-azul-tui",
         "https://www.haystravel.co.uk/courtyard-aruba-resort-palm-beach-aruba-hotel",
         "https://www.haystravel.co.uk/royalton-antigua",
         "https://www.haystravel.co.uk/sandals-grenada-resort-and-spa",
         "https://www.haystravel.co.uk/sandals-grande-st-lucian",
-        "https://www.haystravel.co.uk/sandals-emerald-bay",
-        "https://www.haystravel.co.uk/beaches-turks-caicos"
+        "https://www.haystravel.co.uk/sandals-emerald-bay"
     ],
     "Italy": [
         "https://www.haystravel.co.uk/carlton-on-the-grand-canal-venice",
-        "https://www.haystravel.co.uk/navona-palace-luxury-inn-rome",
-        "https://www.haystravel.co.uk/baia-azzurra-sicily",
-        "https://www.haystravel.co.uk/hotel-ascot-sorrento",
-        "https://www.haystravel.co.uk/carlton-on-the-grand-canal-venice",
-        "https://www.haystravel.co.uk/navona-palace-luxury-inn-rome",
-        "https://www.haystravel.co.uk/baia-azzurra-sicily",
-        "https://www.haystravel.co.uk/hotel-ascot-sorrento",
-        "https://www.haystravel.co.uk/carlton-on-the-grand-canal-venice",
-        "https://www.haystravel.co.uk/navona-palace-luxury-inn-rome"
+        "https://www.haystravel.co.uk/trevi-palace-luxury-inn-rome"
     ],
     "Croatia": [
         "https://www.haystravel.co.uk/boutique-hotel-more-dubrovnik",
@@ -162,16 +148,14 @@
         "https://www.haystravel.co.uk/hotel-lapad-dubrovnik"
     ],
     "Dubai & Middle East": [
-        "https://www.haystravel.co.uk/the-retreat-palm-dubai",
-        "https://www.haystravel.co.uk/dubai-and-bali-twin-centre",
+        "https://www.haystravel.co.uk/sheraton-jumeirah-beach-resort-dubai",
+        "https://www.haystravel.co.uk/abu-dhabi-and-dubai-twin-centre",
         "https://www.haystravel.co.uk/hilton-garden-inn-of-the-emirates",
-        "https://www.haystravel.co.uk/lapita-dubai-parks-resorts",
-        "https://www.haystravel.co.uk/the-retreat-palm-dubai",
-        "https://www.haystravel.co.uk/dubai-and-bali-twin-centre",
+        "https://www.haystravel.co.uk/sheraton-jumeirah-beach-resort-dubai",
+        "https://www.haystravel.co.uk/abu-dhabi-and-dubai-twin-centre",
         "https://www.haystravel.co.uk/hilton-garden-inn-of-the-emirates",
-        "https://www.haystravel.co.uk/lapita-dubai-parks-resorts",
-        "https://www.haystravel.co.uk/the-retreat-palm-dubai",
-        "https://www.haystravel.co.uk/dubai-and-bali-twin-centre"
+        "https://www.haystravel.co.uk/sheraton-jumeirah-beach-resort-dubai",
+        "https://www.haystravel.co.uk/abu-dhabi-and-dubai-twin-centre"
     ],
     "Indian Ocean": [
         "https://www.haystravel.co.uk/laguna-beach-hotel-and-spa",

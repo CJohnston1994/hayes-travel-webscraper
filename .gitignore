@@ -13,8 +13,7 @@ mydb/*
 !tests/test/*.jpg
 
 # Specific files/names 
-.env
+*.env
 my_passwords.*
 mypasswords.yml
 __pycache__/*
-env-file.env

@@ -1,18 +1,19 @@
-import json, unittest
+import json, unittest, boto3
 from unittest import main, TestCase
-from unittest.mock import mock
-from aws import DataHandler
-from sys import prefix
-import pandas as pd
+from unittest.mock import Mock
+from botocore.stub import Stubber
+from webscraper.utils.aws import DataHandler
 from sqlalchemy import create_engine
 
 class AWSTestCase(unittest.TestCase):
     def setUp(self) -> None:
         self.data = json.load('tests/test/data.json')
+        self.client = boto3.client('s3')
+        stubber=Stubber(self.client) 
         self.handler = DataHandler()
+        self.mock = Mock()
         return super().setUp()
 
-    @mock.patch('2.WEBSCRAPER.aws.DataHandler')
     def test_process_data(self, mock_check_data):
         '''
         test for process_data method

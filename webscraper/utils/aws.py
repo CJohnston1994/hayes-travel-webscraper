@@ -1,5 +1,5 @@
 import os, json, psycopg2, boto3, datetime
-import config as c
+import webscraper.utils.config as c
 import pandas as pd
 from sqlalchemy import create_engine
 
@@ -62,7 +62,7 @@ class DataHandler():
                 curs.execute(''' SELECT * FROM hayes_holiday ''')
                 db_df = pd.DataFrame(curs.fetchall())
         dupe_subset = ['url', 'human_id', 'hotel', 'area', 'country', 'price', 'group_size', 'nights', 'catering', 'next_date']
-        df.drop_duplicates(subset = dupe_subset)
+        df.drop_duplicates(subset=dupe_subset)
 
         total_df = pd.concat([df,db_df])
         total_df.drop_duplicates(subset = dupe_subset)

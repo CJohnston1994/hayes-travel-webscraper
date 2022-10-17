@@ -1,5 +1,6 @@
 import os
 with open('env-file.env') as env:
+    
     '''
     AWS s3_client details
     '''
@@ -15,8 +16,8 @@ with open('env-file.env') as env:
     DATABASE_TYPE = 'postgresql'
     DBAPI = 'psycopg2'
     USER = os.environ.get(env.DB_USER)
-    DATABASE = os.environ.get(env.DATABASE_NAME)
-    PORT = os.environ.get(env.PORT)
+    DATABASE = os.environ.get(env.DB_NAME)
+    PORT = os.environ.get(env.DB_PORT)
 
 '''
 XPATH CONSTANTS

@@ -1,4 +1,5 @@
-import os, json, uuid, time, random, aws, config, shutil, re
+from multiprocessing.sharedctypes import Value
+import os, json, uuid, time, random, webscraper.utils.aws as aws, webscraper.utils.config as config, shutil, re
 from dataclasses import dataclass
 from genericpath import exists
 from math import nan
@@ -254,9 +255,11 @@ class Scraper:
         using a using  the clean_date_string method
         '''
         try:
+            print(self._clean_date_string(date_string))
             return self._clean_date_string(date_string)
-        except KeyError as e:
-            return None
+        except ValueError as e:
+            print(e)
+            raise ValueError('Invalid date string') from e
 
     def _clean_date_string(self, date_string):
         '''
@@ -270,33 +273,36 @@ class Scraper:
         new_date = " ".join(new_date)
         try:        
             return datetime.strptime(new_date, '%d %B %Y').date()
-        except Exception as e:
-            return None
+        except ValueError as e:
+            raise ValueError("Invalid date string") from e
+            
             
 
-    def _remove_chars_convert_to_int(self, input):
+    def _remove_chars_convert_to_int(self, group_size):
         '''
         remove characters to convert strings from get_attribute("innerText") to ints
         allowing for easier datacleaning. This is done by subbing all non numeric characters
         leaving us with only numbers which are converted to integers. This handles
         both strings and lists of strings
         '''
-        if isinstance(input, list):
+        if isinstance(group_size, list):
             new_int_list = []
-            for i in range(len(input)):
-                new_int = sub(r'[^\d.]', '', input[i])
+            for num in group_size:
+                new_int = sub(r'[^\d.]', '', num)
                 new_int_list.append(new_int)
-                return list(map(int, new_int_list))
+            return list(map(int, new_int_list))
         else:
-            new_int = int(sub(r'[^\d.]', '', input))
+            new_int = int(sub(r'[^\d.]', '', group_size))
             return new_int
             
-    def _check_family_holiday(self, no_people: str):
+    def _check_family_holiday(self, group_size: str):
         '''
         if there are Adults and children in a holiday deal split this into a list of 2 entries
         to be converted into ints
         '''
-        no_people = self._remove_chars_convert_to_int(no_people)
+
+        no_people = self._remove_chars_convert_to_int(group_size.split(' + '))
+        
         return sum(no_people) if type(no_people) == list else no_people
         
     def _find_holiday_detail(self, container: str, element_xpath: str):
