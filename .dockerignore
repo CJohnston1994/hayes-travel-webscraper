@@ -1,0 +1,8 @@
+#ignore everything
+*
+
+#allow files and directories
+!/webscraper/*
+!/requirements.txt
+
+# Exceptions to the above

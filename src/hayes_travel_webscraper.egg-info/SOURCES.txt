@@ -1,0 +1,8 @@
+README.md
+setup.py
+src/hayes_travel_webscraper.egg-info/PKG-INFO
+src/hayes_travel_webscraper.egg-info/SOURCES.txt
+src/hayes_travel_webscraper.egg-info/dependency_links.txt
+src/hayes_travel_webscraper.egg-info/top_level.txt
+test/test_aws.py
+test/test_webscraper.py

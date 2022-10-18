@@ -1,0 +1,19 @@
+# Extensions
+**/*.jpg
+*.ipynb
+__pycache__/*
+gpg
+
+# File Paths
+raw_data/*
+mydb/*
+
+# Exceptions
+!raw_data/src
+!tests/test/*.jpg
+
+# Specific files/names 
+*.env
+my_passwords.*
+mypasswords.yml
+__pycache__/*
