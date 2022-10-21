@@ -62,7 +62,11 @@ class DataHandler():
                 curs.execute(''' SELECT * FROM hayes_holiday ''')
                 db_df = pd.DataFrame(curs.fetchall())
         dupe_subset = ['url', 'human_id', 'hotel', 'area', 'country', 'price', 'group_size', 'nights', 'catering', 'next_date']
+<<<<<<< HEAD:webscraper/utils/aws.py
         df.drop_duplicates(subset=dupe_subset)
+=======
+        df.drop_duplicates(subset = dupe_subset)
+>>>>>>> 16aec5a7d823d1884e6ccae20c82a452aa0901f0:aws.py
 
         total_df = pd.concat([df,db_df])
         total_df.drop_duplicates(subset = dupe_subset)
