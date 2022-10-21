@@ -1,18 +1,22 @@
 import os, json, psycopg2, boto3, datetime
 import utils.config as c
 import pandas as pd
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, inspect
 
 class DataHandler():
     def __init__(self):
         #aws resources        
-        s3_session = boto3.Session(aws_access_key_id=c.S3_ACCESS_KEY,aws_secret_access_key =c.S3_SECRET_KEY)
+        s3_session = boto3.Session(aws_access_key_id=c.S3_ACCESS,aws_secret_access_key =c.S3_SECRET)
         self.s3_client = s3_session.client('s3')
         self.s3_resource = s3_session.resource('s3')
         self.my_bucket = self.s3_resource.Bucket('hayes-travel-web-scraper')
 
         self.engine = create_engine(f"{c.DATABASE_TYPE}+{c.DBAPI}://{c.USER}:{c.PASSWORD}@{c.HOST}:{c.PORT}/{c.DATABASE}")
+        
 
+    def table_check_create_if_not_exist(self):
+        ins = inspect(self.engine)
+        return ins.has_table(self.engine.connect(),'hayes_holiday')
 
     def _upload_data(self, df: pd.DataFrame):
         '''
@@ -21,7 +25,9 @@ class DataHandler():
         df = pd.DataFrame(df)
         for index, row in df.iterrows():
             file_name = os.path.join("raw_data", row["uuid"], 'data.json')
-            self.s3_client.upload_file(file_name, 'hayes-travel-web-scraper', file_name)   
+            self.s3_client.upload_file(file_name, 'hayes-travel-web-scraper', file_name)
+
+        
         
     def __send_data_to_rds(self, df: pd.DataFrame):
         self.engine.connect()
@@ -31,7 +37,6 @@ class DataHandler():
 
     def __clean_and_normalize(self, data: list) -> pd.DataFrame:
         df = pd.DataFrame.from_dict(data)
-        
         pd.to_datetime(df.loc[0, 'next_date'])
 
         return df
@@ -57,24 +62,28 @@ class DataHandler():
         return scraped_images
 
     def drop_duplicates(self, df:  pd.DataFrame) -> pd.DataFrame:
+
         with psycopg2.connect(host=c.HOST, user=c.USER, password=c.PASSWORD, dbname=c.DATABASE, port=c.PORT) as conn:
             with conn.cursor() as curs:
                 curs.execute(''' SELECT * FROM hayes_holiday ''')
                 db_df = pd.DataFrame(curs.fetchall())
-        dupe_subset = ['url', 'human_id', 'hotel', 'area', 'country', 'price', 'group_size', 'nights', 'catering', 'next_date']
-        df.drop_duplicates(subset=dupe_subset)
+                total_df = df.append(db_df)
 
-        total_df = pd.concat([df,db_df])
-        total_df.drop_duplicates(subset = dupe_subset)
+
+        dupe_subset = ['url', 'human_id', 'hotel', 'area', 'country', 'price', 'group_size', 'nights', 'catering', 'next_date']
+        df.drop_duplicates(subset=dupe_subset, keep="first").dropna()
+        print(df)
 
         return total_df
 
     def process_data(self, raw_data):
-        df = self.__clean_and_normalize(raw_data)
-        dupe_free = self.drop_duplicates(df)
-        self._upload_data(dupe_free)
-        self.__send_data_to_rds(dupe_free)
-        
+        clean_df = self.__clean_and_normalize(raw_data)
+        if table_exists := self.table_check_create_if_not_exist():
+            dupe_free = self.drop_duplicates(clean_df)
+            self.__send_data_to_rds(dupe_free)
+        else:
+            self.__send_data_to_rds(clean_df)
+        #self._upload_data(dupe_free)        
 
     def process_images(self, path):
         original_path = os.getcwd()
@@ -96,7 +105,7 @@ class DataHandler():
                                 AND hayes_holiday.next_date < '{today}';
                             DELETE FROM hayes_holiday
                                 WHERE hayes_holiday.next_date < '{today}';                      
-                ''')
+                            ''')
 
     def remove_duplicates(self):
         with psycopg2.connect(host=c.HOST, user=c.USER, password=c.PASSWORD, dbname=c.DATABASE, port=c.PORT) as conn:

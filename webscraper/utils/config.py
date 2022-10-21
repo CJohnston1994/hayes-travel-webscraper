@@ -3,21 +3,20 @@ import os
 '''
 AWS s3_client details
 '''
-S3_ACCESS = os.environ.get(os.env.S3_ACCESS_KEY)
-S3_SECRET = os.environ.get(os.env.S3_SECRET_KEY)
-S3_BUCKET = os.environ.get(os.env.BUCKET_NAME)
+S3_ACCESS = os.environ.get('S3_ACCESS_KEY')
+S3_SECRET = os.environ.get('S3_SECRET_KEY')
+S3_BUCKET = os.environ.get('BUCKET_NAME')
 
 '''
 SQLalchemy database engine details
 '''
-HOST = os.environ.get(os.env.HOST)
-PASSWORD = os.environ.get(os.env.PASSWORD)
+HOST = os.environ['HOST']
+PASSWORD = os.environ["PASSWORD"]
 DATABASE_TYPE = 'postgresql'
 DBAPI = 'psycopg2'
-USER = os.environ.get(os.env.DB_USER)
-DATABASE = os.environ.get(os.env.DB_NAME)
-PORT = os.environ.get(os.env.DB_PORT)
-
+USER = os.environ.get('DB_USER')
+DATABASE = os.environ.get('DATABASE_NAME')
+PORT = os.environ.get('PORT')
 '''
 XPATH CONSTANTS
 '''

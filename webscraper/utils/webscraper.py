@@ -167,7 +167,10 @@ class Scraper:
                 # scrapes details
                 self.driver.get(holiday)
                 current_holiday = self._Holiday()
-                self.__get_holiday_details(current_holiday, country)
+                try:
+                    self.__get_holiday_details(current_holiday, country)
+                except Exception as e:
+                    continue
                 holiday_path = os.path.join("raw_data", f'{current_holiday.uuid}')
                 if not exists(holiday_path):
                     os.mkdir(holiday_path)
@@ -176,7 +179,7 @@ class Scraper:
                     os.mkdir(image_path)
                 with open(os.path.join(holiday_path,"data.json"), "w") as outfile:
                     json.dump(current_holiday.__dict__, outfile, indent=4, default=str)
-      
+
                 total_list.append(current_holiday.__dict__)
 
             print(f"{country} scrape completed!")
@@ -330,7 +333,7 @@ class Scraper:
         self.data_handler.process_data(dataframe_list)
         #self.__scrape_images(dataframe_list)
         print("Scrape Complete")
-        self.data_handler.remove_expired()
+        #self.data_handler.remove_expired()
         print("Expired Deals removed")
         shutil.rmtree('raw_data')
         print("Local data cleared")
