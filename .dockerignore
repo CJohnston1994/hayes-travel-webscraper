@@ -2,8 +2,7 @@
 *
 
 #allow files and directories
-!/*.py
-!/src
+!/webscraper/*
 !/requirements.txt
 
 # Exceptions to the above

@@ -12,7 +12,7 @@ RUN apt-get -y update \
     && apt-get -y install libpq-dev gcc
 
 #setting working directory
-WORKDIR /2.WebScraper
+WORKDIR /hayes-travel-webscraper
 
 #copying from main directory to container directory
 COPY . .
@@ -20,5 +20,6 @@ COPY . .
 #installing requirements
 RUN pip install -r requirements.txt --no-cache-dir
 
+
 #run the python file via commandline
-CMD [ "python", "main.py" ]
+CMD ["python", "webscraper/main.py"]

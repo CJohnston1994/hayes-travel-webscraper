@@ -1,8 +1,8 @@
-from multiprocessing.sharedctypes import Value
-import os, json, uuid, time, random, webscraper.utils.aws as aws, webscraper.utils.config as config, shutil, re
+import os, json, uuid, time, random,  shutil, re
+from utils.aws import DataHandler
+import utils.config as c
 from dataclasses import dataclass
 from genericpath import exists
-from math import nan
 from re import sub
 from urllib.request import urlretrieve
 from datetime import datetime
@@ -14,13 +14,6 @@ from selenium.webdriver.chrome.options import Options
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.chrome.service import Service
 from typing import ClassVar
-
-class holidayEncoder(json.JSONEncoder):
-    def default(self, obj):
-        if isinstance(obj, Scraper._Holiday):
-            return obj.__dict__
-        # Base class default() raises TypeError:
-        return json.JSONEncoder.default(self, obj)
 
 class Scraper:
     def __init__(self, url: str, autoscrape:bool = True ):
@@ -34,8 +27,7 @@ class Scraper:
         self.driver = Chrome(service=Service(ChromeDriverManager().install()), options = options)
         self.driver.get(self.URL)
         self.wait = WebDriverWait(self.driver, 10)
-        self.data_handler = aws.DataHandler()
-            
+        self.data_handler = DataHandler()            
         if not exists("raw_data"):
             os.mkdir("raw_data")
         if autoscrape:
@@ -105,8 +97,8 @@ class Scraper:
         #initialize/clear the list of countries without holidays
         countries_without_holidays = []
         #xpaths for the current project. Can be changed per site
-        holiday_xpath = config.HOLIDAY_XPATH
-        city_xpath = config.CITY_XPATH
+        holiday_xpath = c.HOLIDAY_XPATH
+        city_xpath = c.CITY_XPATH
 
         #loop throught the countries gathered from the site
 
@@ -215,16 +207,16 @@ class Scraper:
         page_url = self.driver.current_url
         deterministic_id = page_url.replace("https://www.haystravel.co.uk/","")
         try:
-            area = self._find_holiday_detail(config.LOCATION_CONTAINER_XPATH, '/div[2]')
-            hotel = self._find_holiday_detail(config.LOCATION_CONTAINER_XPATH, '/h1')
+            area = self._find_holiday_detail(c.LOCATION_CONTAINER_XPATH, '/div[2]')
+            hotel = self._find_holiday_detail(c.LOCATION_CONTAINER_XPATH, '/h1')
         except Exception:
             area = None
             hotel = deterministic_id.replace("-", " ")
 
-        self._find_holiday_detail(config.DETAILS_CONTAINER_XPATH, '/div[1]//p')
-        group_size = self._find_holiday_detail(config.DETAILS_CONTAINER_XPATH, '/div[1]//p')
-        duration = self._find_holiday_detail(config.DETAILS_CONTAINER_XPATH, '/div[2]//p')
-        soonest_departure = self._find_holiday_detail(config.DETAILS_CONTAINER_XPATH, '/div[5]//p[1]')
+        self._find_holiday_detail(c.DETAILS_CONTAINER_XPATH, '/div[1]//p')
+        group_size = self._find_holiday_detail(c.DETAILS_CONTAINER_XPATH, '/div[1]//p')
+        duration = self._find_holiday_detail(c.DETAILS_CONTAINER_XPATH, '/div[2]//p')
+        soonest_departure = self._find_holiday_detail(c.DETAILS_CONTAINER_XPATH, '/div[5]//p[1]')
         images = set()
         images_element = self.driver.find_elements(By.XPATH, '//div[@class = "carousel-item"]/img')
         for image in images_element:
@@ -245,7 +237,7 @@ class Scraper:
         setattr(holiday, "images", list(images))
 
         #loop through the dict values in the config file and set attributes for each key
-        for key, value in list(config.XPATH_DETAILS_DICTIONARY.items()):
+        for key, value in list(c.XPATH_DETAILS_DICTIONARY.items()):
             setattr(holiday, key, self._find_holiday_detail(value[0], value[1]))
        
      
@@ -255,7 +247,6 @@ class Scraper:
         using a using  the clean_date_string method
         '''
         try:
-            print(self._clean_date_string(date_string))
             return self._clean_date_string(date_string)
         except ValueError as e:
             print(e)
@@ -331,6 +322,8 @@ class Scraper:
         dataframe_list = self.__scrape_per_country(url_dict)
         self.data_handler.process_data(dataframe_list)
         #self.__scrape_images(dataframe_list)
-        print("Scrape Complete\n\n")
+        print("Scrape Complete")
         self.data_handler.remove_expired()
+        print("Expired Deals removed")
         shutil.rmtree('raw_data')
+        print("Local data cleared")

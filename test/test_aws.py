@@ -9,7 +9,6 @@ class AWSTestCase(unittest.TestCase):
     def setUp(self) -> None:
         self.data = json.load('tests/test/data.json')
         self.client = boto3.client('s3')
-        stubber=Stubber(self.client) 
         self.handler = DataHandler()
         self.mock = Mock()
         return super().setUp()

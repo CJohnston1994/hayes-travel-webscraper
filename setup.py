@@ -9,6 +9,7 @@ setup(
     url='https://github.com/CJohnston1994/2.WebScraper',
     author='Clark Johnston',
     license='MIT',
-    packeges=find_packages(),
-    install_requires=['selenium', ' psycopg2', 'boto3'],
+    packeges=find_packages(['boto3','pandas','psycopg2-binary','selenium','webdriver_manager','sqlalchemy'])   
 )
+
+

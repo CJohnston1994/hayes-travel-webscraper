@@ -1,0 +1,7 @@
+Metadata-Version: 2.1
+Name: hayes-travel-webscraper
+Version: 0.0.1
+Summary: Python package for scraping Hayes travelagents
+Home-page: https://github.com/CJohnston1994/2.WebScraper
+Author: Clark Johnston
+License: MIT
