@@ -42,6 +42,8 @@ TO BE COMPLETED
   - Selenium
   - Boto3
   - Psycopg2
+  -Pandas
+  -SQLAlchemy
 
 - Amazon Web Services
   -S3
@@ -62,8 +64,14 @@ List the ready features here:
 
 
 ## Setup
-What are the project requirements/dependencies? Where are they listed? A requirements.txt or a Pipfile.lock file perhaps? Where is it located?
-Proceed to describe how to install / setup one's local environment / get started with the project.
+- Requirements.txt found in root directory
+  -boto3==1.24.22
+  -pandas==1.4.3
+  -psycopg2==2.9.3
+  -psycopg2_binary==2.9.3
+  -selenium==4.4.0
+  -SQLAlchemy==1.4.39
+  -webdriver_manager==3.7.0
 
 
 ## Usage
