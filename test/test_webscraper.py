@@ -17,7 +17,7 @@ class WebscraperTestCase(unittest.TestCase):
 
     #@unittest.skip
     def test_dict_countries(self):
-        scraped_dict_countries = self.test_scraper._dict_countries()
+        scraped_dict_countries = self.test_scraper._scrape_countries_to_dict()
         self.assertIsInstance(scraped_dict_countries, dict)
         self.assertIn("Spain", scraped_dict_countries)
 
@@ -26,7 +26,7 @@ class WebscraperTestCase(unittest.TestCase):
         '''
         Can fail due to website changing, creating a difference from the stored data.
         '''
-        scraped_holidays = self.test_scraper._get_holidays_from_country(self.country_url_dict)
+        scraped_holidays = self.test_scraper._scrape_holidays_from_country(self.country_url_dict)
         self.assertDictEqual(scraped_holidays,self.holiday_url_dict)
         self.assertIsInstance(scraped_holidays, dict)
 
