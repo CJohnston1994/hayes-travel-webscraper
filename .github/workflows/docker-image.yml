@@ -27,4 +27,4 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/hayes-travel-webscraper:latest
+          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/hayes-travel-webscraper:latest
