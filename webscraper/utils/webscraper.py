@@ -15,13 +15,6 @@ from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.chrome.service import Service
 from typing import ClassVar
 
-class holidayEncoder(json.JSONEncoder):
-    def default(self, obj):
-        if isinstance(obj, Scraper._Holiday):
-            return obj.__dict__
-        # Base class default() raises TypeError:
-        return json.JSONEncoder.default(self, obj)
-
 class Scraper:
     def __init__(self, url: str, autoscrape:bool = True ):
         user_agent = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36"
@@ -67,7 +60,7 @@ class Scraper:
             cookies_btn.click()
             return True
         except Exception:
-            return False
+            print("Failed to accept cookies")
 
     def __remove_dict_keys_from_list(
         self, 
@@ -81,13 +74,16 @@ class Scraper:
             dict.pop(link,None)
         return dict
 
-    def _dict_countries(self):
+    def _scrape_countries_to_dict(self) -> dict:
         '''
-        Creates a dictionary, using the destination as a key and the URL as the value
+        Creates a dictionary, using the country as a key and URL as the value
         '''
+
+        #create an empty dict to retrun
         countries = {}
         elems = self.driver.find_elements(By.XPATH, '//a[@class = "item shadow"]')
         for elem in elems:
+            #get the href, then get the title attribute from it. then add the key and value to the dictionary
             dest_link = elem.get_attribute('href')
             country_name = elem.get_attribute('title')
             countries[country_name] = dest_link
@@ -97,7 +93,7 @@ class Scraper:
             json.dump(countries, outfile, indent=4)
         return countries
     
-    def _get_holidays_from_country(self, dict_of_countries:dict) -> dict:
+    def _scrape_holidays_from_country(self, dict_of_countries:dict) -> dict:
         '''
         Takes the country url dict and gets all the holidays hrefs from the urls for the countries
         '''
@@ -150,7 +146,7 @@ class Scraper:
         return href_list
 
 
-    def __scrape_per_country(self, dict_of_countries:dict):
+    def __scrape_each_country(self, dict_of_countries:dict):
         '''
         navigate to the holiday url and create the holiday data object
         gets the datails and assign them to the dict entry
@@ -210,8 +206,9 @@ class Scraper:
 
         '''
         This method collects details from each holiday url
-
-        Create congig and create 
+        using selenium to scrape the webpage for the details.
+        each detail is then attached to the Holiday dataclass using the setattr method
+        to remove some redunant code a dict was used in the config file to pass multiple attributes at once.
 
         '''
         page_url = self.driver.current_url
@@ -325,15 +322,13 @@ class Scraper:
         Main Scraping of the program
         '''
         self._accept_cookies('onetrust-accept-btn-handler')
-        #try:
-
-        country_dict = self._dict_countries()
-        url_dict = self._get_holidays_from_country(country_dict)
-        dataframe_list = self.__scrape_per_country(url_dict)
+        country_dict = self._scrape_countries_to_dict()
+        url_dict = self._scrape_holidays_from_country(country_dict)
+        dataframe_list = self.__scrape_each_country(url_dict)
         self.data_handler.process_data(dataframe_list)
         #self.__scrape_images(dataframe_list)
         print("Scrape Complete")
-        #self.data_handler.remove_expired()
+        self.data_handler.remove_expired()
         print("Expired Deals removed")
         shutil.rmtree('raw_data')
         print("Local data cleared")

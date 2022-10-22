@@ -18,3 +18,4 @@ my_passwords.*
 mypasswords.yml
 __pycache__/*
 hayes-travel-scraper.pem
+**/*.cpython-38.pyc
