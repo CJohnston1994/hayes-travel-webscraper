@@ -7,8 +7,13 @@ tags: []
 TO BE COMPLETED
 
 # Project Name
-> This is a webscraper to collect holiday data from Hays Travel.
-> Live demo TBC
+> This is a webscraper to collect holiday data from Hays Travel using selenium.
+> The data is then cleaned and converted into a pandas dataframe
+> In a clean database the table is generated using the pandas to_sql function.
+> Finally the database is maintained using psycopg2 to run sql queries to clear Expired
+
+> Git hub actions is used to implement CI/CD functionality to build 
+
 
 ## Table of Contents
 * [General Info](#general-information)
@@ -33,16 +38,22 @@ TO BE COMPLETED
 
 
 ## Technologies Used
-- Tech 1 - version 1.0
-- Tech 2 - version 2.0
-- Tech 3 - version 3.0
+- Python
+  - Selenium
+  - Boto3
+  - Psycopg2
+
+- Amazon Web Services
+  -S3
+  -RDS
+  -EC2
+- GitHub Actions
 
 
 ## Features
 List the ready features here:
-- Awesome feature 1
-- Awesome feature 2
-- Awesome feature 3
+- Automatic database cleaning, removes duplicates and expired deals
+- 
 
 
 ## UML
@@ -52,7 +63,6 @@ List the ready features here:
 
 ## Setup
 What are the project requirements/dependencies? Where are they listed? A requirements.txt or a Pipfile.lock file perhaps? Where is it located?
-
 Proceed to describe how to install / setup one's local environment / get started with the project.
 
 
@@ -67,22 +77,21 @@ Provide various use cases and code examples here.
 Project is: _in progress_ 
 
 ## Room for Improvement
-Include areas you believe need improvement / could be improved. Also add TODOs for future development.
 
 Room for improvement:
-- Improvement to be done 1
-- Improvement to be done 2
+- Add more error checking to the scraper. Some variance in the website lead to selenium not finding elements and leaving some null values
+- Improve and add more intricate RDS functionality.
 
 To do:
-- Feature to be added 1
-- Feature to be added 2
+- Change data cleaning to be mainly done in pandas
+- Create EC2 instance and add monitoring and metrics with Prometheus and Grafana
 
 
 ## Acknowledgements
 Give credit here.
-- This project was inspired by...
+- This project was inspired by AICore
 - This project was based on [this tutorial](https://www.example.com).
-- Many thanks to...
+- Many thanks to Harry Berg, Blair Martin and Wayne Rose
 
 
 ## Contact
