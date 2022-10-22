@@ -15,13 +15,6 @@ from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.chrome.service import Service
 from typing import ClassVar
 
-class holidayEncoder(json.JSONEncoder):
-    def default(self, obj):
-        if isinstance(obj, Scraper._Holiday):
-            return obj.__dict__
-        # Base class default() raises TypeError:
-        return json.JSONEncoder.default(self, obj)
-
 class Scraper:
     def __init__(self, url: str, autoscrape:bool = True ):
         user_agent = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36"
@@ -210,8 +203,9 @@ class Scraper:
 
         '''
         This method collects details from each holiday url
-
-        Create congig and create 
+        using selenium to scrape the webpage for the details.
+        each detail is then attached to the Holiday dataclass using the setattr method
+        to remove some redunant code a dict was used in the config file to pass multiple attributes at once.
 
         '''
         page_url = self.driver.current_url
@@ -333,7 +327,7 @@ class Scraper:
         self.data_handler.process_data(dataframe_list)
         #self.__scrape_images(dataframe_list)
         print("Scrape Complete")
-        #self.data_handler.remove_expired()
+        self.data_handler.remove_expired()
         print("Expired Deals removed")
         shutil.rmtree('raw_data')
         print("Local data cleared")
