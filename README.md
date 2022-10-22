@@ -60,14 +60,15 @@ List the ready features here:
 ## Setup
 - Dockerhub - https://hub.docker.com/r/theglink/hayes-travel-webscraper
   -environment variables required:
-    -S3_ACCESS_KEY
-    -S3_SECRET_KEY
-    -BUCKET_NAME
-    -HOST
-    -PASSWORD
-    -DB_USER
-    -DATABASE_NAME
-    -PORT
+
+  -S3_ACCESS_KEY  
+  -S3_SECRET_KEY  
+  -BUCKET_NAME  
+  -HOST  
+  -PASSWORD  
+  -DB_USER  
+  -DATABASE_NAME  
+  -PORT
 - Requirements.txt found in root directory
   -boto3==1.24.22
   -pandas==1.4.3
@@ -79,12 +80,12 @@ List the ready features here:
 
 
 ## Usage
-Usage is very simple, Simply run the docker container providing the environment file using
-'docker run --env-file env-file.env hayes_travel_scraper'
-wher the environment file is laid out as shown above. Database api is locked to psycopg2 and databasetype is locked to postgresql
+Usage is very simple, Simply run the docker container providing the environment file using  
+`docker run --env-file {environemnt filename}.env hayes_travel_scraper`  
+where the environment file is laid out as shown in setup. Database api is locked to psycopg2 and databasetype is locked to postgresql
 
 ## Project Status
-Project is: _in progress_ 
+Project is: _Mostly completed_ 
 
 ## Room for Improvement
 
