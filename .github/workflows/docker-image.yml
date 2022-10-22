@@ -24,7 +24,7 @@ jobs:
         with:
           context: ./
           file: ./Dockerfile
-          buildder: ${{ steps.builderx.outputs.name}}
+          buildder: ${{ steps.buildx.outputs.name}}
           push: true
           tags: ${{ secrets.DOCKER_HUB_USERNAME }}/hayes-travel-webscraper:latest
           cache-from: type=registry, ref=${{  secrets.DOCKER_HUB_USERNAME }}/hayes-travel-webscraper:latest
