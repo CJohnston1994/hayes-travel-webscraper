@@ -60,14 +60,15 @@ List the ready features here:
 ## Setup
 - Dockerhub - https://hub.docker.com/r/theglink/hayes-travel-webscraper
   -environment variables required:
-    -S3_ACCESS_KEY
-    -S3_SECRET_KEY
-    -BUCKET_NAME
-    -HOST
-    -PASSWORD
-    -DB_USER
-    -DATABASE_NAME
-    -PORT
+
+  '-S3_ACCESS_KEY
+  -S3_SECRET_KEY
+  -BUCKET_NAME
+  -HOST
+  -PASSWORD
+  -DB_USER
+  -DATABASE_NAME
+  -PORT'
 - Requirements.txt found in root directory
   -boto3==1.24.22
   -pandas==1.4.3

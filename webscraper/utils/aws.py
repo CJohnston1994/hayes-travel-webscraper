@@ -169,7 +169,9 @@ class DataHandler():
             with conn.cursor() as curs:
                 curs.execute('''
                 CREATE TABLE distinct_store AS(
-                    SELECT DISTINCT url, price, group_size, next_date hayes_holiday.* FROM hayes_holiday);
+                    SELECT DISTINCT ON (url, price, group_size, next_date)
+                    * 
+                    FROM hayes_holiday);
                     DROP TABLE hayes_holiday;
                     ALTER TABLE distinct_store
                     RENAME TO hayes_holiday;
